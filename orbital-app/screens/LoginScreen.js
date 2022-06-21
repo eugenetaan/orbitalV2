@@ -88,7 +88,6 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     logoText: {
-        fontFamily: 'montserrat',
         fontWeight: 'bold',
         fontSize: 50,
         paddingBottom: 130,
