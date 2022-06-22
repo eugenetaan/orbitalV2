@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Button, Appearance} from 'react-native'
 import { sessionStorage } from '../localstorage'
 import { Dropdown } from 'react-native-material-dropdown-v2'
-import { render } from 'react-dom'
-import parseErrorStack from 'react-native/Libraries/Core/Devtools/parseErrorStack'
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 const DummyCats = [ {value: "Food"}, {value: "Entertainment"}, {value :"Transport"}]
 
@@ -12,8 +11,23 @@ sessionStorage.setItem('dummyCats', DummyCats)
 const AddScreen = () => {
     const [enteredTitle, setEnteredTitle] = useState("");
     const [enteredAmount, setEnteredAmount] = useState("0.00");
-    const [enteredDate, setEnteredDate] = useState("");
+    const [enteredDate, setEnteredDate] = useState(new Date());
     const [selectedCat, setSelectedCat] = useState("Transport");
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showDatePicker = () => {
+      setDatePickerVisibility(true);
+    };
+  
+    const hideDatePicker = () => {
+      setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        console.warn("A date has been picked: ", date);
+        setEnteredDate(date);
+        hideDatePicker();
+      };
     
     const addExpenseToListHandler = (expense) => {
         addExpenses((prevExpenses) => {
@@ -50,35 +64,45 @@ const AddScreen = () => {
         }
       };
     
+     // change to delete from the back 
     const handleDeletion = () => {
         if (enteredAmount.length > 4) {
-            setEnteredAmount(enteredAmount.substring(1));
+            setEnteredAmount(enteredAmount.slice(0, enteredAmount.length - 4) + "." + enteredAmount[enteredAmount.length-4] + enteredAmount[enteredAmount.length-2]);
         } else if (enteredAmount > "0.99") {
-            setEnteredAmount("0" + enteredAmount.substring(1));
+            setEnteredAmount("0" + "." + enteredAmount[0] + enteredAmount[2]);
         }  else if (enteredAmount > "0.09") {
-            setEnteredAmount('0.0' + enteredAmount.substring(3))
+            setEnteredAmount('0.0' + enteredAmount[2])
         } else {
             setEnteredAmount("0.00")
         }
       };
 
 
-    // const addExpenseHandler = () => {
-    //     var newExpense = {
-    //         title : enteredTitle,
-    //         cat : selectedCat,
-    //         amount : enteredAmount,
-    //         date : enteredDate,
-    //         key : Math.random()
-    //     }
-    
-    //     setEnteredAmount("");
-    //     setEnteredDate("");
-    //     setEnteredTitle("");
-    
-    //     props.AddExpenseHandler(newExpense);
-    //     props.CloseAddExpenseModalHandler();
-    // }
+    const handleAddExpense = () => {
+        var newExpense = {
+            title : enteredTitle,
+            cat : selectedCat,
+            amount : enteredAmount,
+            date : enteredDate,
+            key : Math.random()
+        }
+
+        if (enteredAmount==="0.00") {
+            alert("Amount must be more than 0")
+        } else if (enteredTitle==="") {
+            alert('Title cannot be empty')
+        } else {
+            console.info(sessionStorage.getItem('dummyExpenses'))
+            var oldData = sessionStorage.getItem('dummyExpenses');
+            // add items to front of array
+            oldData.unshift(newExpense);
+            sessionStorage.setItem('dummyExpenses', oldData);
+            console.info(sessionStorage.getItem('dummyExpenses'))
+            setEnteredAmount("0.00");
+            setEnteredDate(new Date());
+            setEnteredTitle("");
+        }
+    }
 
     return (
     <View style={{backgroundColor:"E5E5E5"}}>
@@ -88,10 +112,22 @@ const AddScreen = () => {
                     placeholder="Expense Title"
                     value = {enteredTitle}
                     onChangeText = {text => setEnteredTitle(text)}
-                    style={styles.titleInput} /> 
-                <Text>{enteredDate}</Text>
-                <Text>{enteredAmount}</Text>
-                <Dropdown label='Categories' data={DummyCats}></Dropdown>
+                    style={styles.titleInput} />
+                <View style={styles.dateDisplay}>
+                    <Text style={{fontSize:25, marginLeft: 20}}>{enteredDate.toISOString().slice(0,10)}</Text>
+                    <Button style={{marginRight: 30}} title="Select Date" onPress={showDatePicker} />
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                        isDarkModeEnabled={Appearance.getColorScheme() === 'dark' ? true : false}
+                    />
+                </View>
+                <View style={styles.amountView}>
+                    <Text style={styles.amountText}>{enteredAmount}</Text>
+                </View>
+                <Dropdown label='Categories' data={DummyCats} onChangeText={value => setSelectedCat(value)} value={selectedCat}></Dropdown>
             </View>
         </View>
         <View style={styles.inputArea}>
@@ -113,7 +149,7 @@ const AddScreen = () => {
             <View style={styles.numberRow}>
                 <TouchableOpacity style={styles.numberButton} onPress={() => handleDeletion()}><Text style={styles.numberButtonText}>Del</Text></TouchableOpacity>
                 <TouchableOpacity style={styles.numberButton} onPress={() => handleNumberPress("0")}><Text style={styles.numberButtonText}>0</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.numberButton} onPress={() => handleOpPress("add")}><Text style={styles.numberButtonText}>Add</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.numberButton} onPress={() => handleAddExpense()}><Text style={styles.numberButtonText}>Add</Text></TouchableOpacity>
             </View>
         </View>
     </View>
@@ -148,7 +184,24 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 10,
-        marginTop:5,
+        marginTop:10,
+        marginHorizontal: 20,
+        fontSize: 30
+    },
+    amountView: {
+        backgroundColor: 'white',
+        alignItems: 'center',
+        borderRadius: 30,
+        marginHorizontal: 20,
+        marginBottom: 10,
+    },
+    amountText: {
+        fontSize: 40
+    },
+    dateDisplay: {
+        flexDirection:"row",
+        justifyContent:"space-between",
+        marginTop: 10
     }
 })
 
