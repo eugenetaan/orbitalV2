@@ -64,7 +64,6 @@ const AddScreen = () => {
         }
       };
     
-     // change to delete from the back 
     const handleDeletion = () => {
         if (enteredAmount.length > 4) {
             setEnteredAmount(enteredAmount.slice(0, enteredAmount.length - 4) + "." + enteredAmount[enteredAmount.length-4] + enteredAmount[enteredAmount.length-2]);
@@ -76,7 +75,6 @@ const AddScreen = () => {
             setEnteredAmount("0.00")
         }
       };
-
 
     const handleAddExpense = () => {
         var newExpense = {
@@ -101,6 +99,7 @@ const AddScreen = () => {
             setEnteredAmount("0.00");
             setEnteredDate(new Date());
             setEnteredTitle("");
+            alert('Expense Added Successfully')
         }
     }
 
@@ -162,18 +161,20 @@ const styles = StyleSheet.create({
         justifyContent: "space-around"
     },
     numberButton : {
-        borderRadius: 10,
+        borderRadius: 250,
         backgroundColor: 'white',
         color: "black",
-        paddingVertical: 10,
-        paddingHorizontal: 10,
+        width: 80,
+        height: 80,
         marginBottom: 10,
+        alignItems: 'center',
+        paddingTop: 20
     },
     numberButtonText : {
         fontSize: 35,
     },
     inputArea: {
-        height: "160%"
+        height: "150%"
 
     },
     viewingArea: {

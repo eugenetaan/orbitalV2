@@ -27,6 +27,8 @@ const LoginScreen = () => {
     // }   
 
     const handleLogin = () => {
+        setEmail("");
+        setPassword("");
         auth
             .signInWithEmailAndPassword(email, password)  
             .then(sessionStorage.setItem("email", email))

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native'
-import { NavigationContainer } from "@react-navigation/native";
+import { useNavigation } from '@react-navigation/core';
 import { sessionStorage } from '../localstorage'
 import { db } from '../Firebase'
 import Tabs from '../navigator/navbar'
@@ -15,6 +15,7 @@ let DUMMY = [
 sessionStorage.setItem("dummyExpenses", DUMMY);
 
 const HomeScreen = () => {
+    const navigation = useNavigation();
     const [username, setUsername] = useState("");
     var currentUserEmail = sessionStorage.getItem("email");
 
@@ -29,6 +30,10 @@ const HomeScreen = () => {
                 setUsername(name);
             })
     }, [])
+
+    const handleViewAll = () => {
+        navigation.navigate("ViewAll")
+    }
 
     return (
         <SafeAreaView style={styles.homeContainer}>
@@ -48,7 +53,7 @@ const HomeScreen = () => {
             <View style={styles.recents}>
                 <View style={styles.recentTopBarContainer}>
                     <Text style={{paddingLeft:20, fontSize:25, fontWeight:"bold"}}>Recents</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handleViewAll}>
                         <Text style={{paddingRight:20,fontSize:20, paddingTop:2}}>View All</Text>
                     </TouchableOpacity>
                 </View>
