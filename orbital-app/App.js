@@ -10,6 +10,9 @@ import navbar from "./navigator/navbar";
 import RegisterScreen from './screens/RegisterScreen';
 import ViewAllScreen from './screens/ViewAllScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import BillsScreen from './screens/BillsScreen';
+import BudgetScreen from './screens/BudgetScreen';
+import CategoriesScreen from './screens/CategoriesScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +25,9 @@ export default function App() {
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="ViewAll" component={ViewAllScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
+        <Stack.Screen name="Bills" component={BillsScreen} />
+        <Stack.Screen name="Categories" component={CategoriesScreen} />
+        <Stack.Screen name="Budget" component={BudgetScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

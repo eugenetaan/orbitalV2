@@ -133,6 +133,4 @@ const styles = StyleSheet.create({
     },
     list : {
     }
-
-
 })

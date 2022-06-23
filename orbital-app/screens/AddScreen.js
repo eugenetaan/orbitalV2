@@ -99,7 +99,7 @@ const AddScreen = () => {
             setEnteredAmount("0.00");
             setEnteredDate(new Date());
             setEnteredTitle("");
-            alert('Expense Added Successfully')
+            alert('Expense Added Successfullly')
         }
     }
 

@@ -16,23 +16,28 @@ const SettingsScreen = () => {
             .catch((error) => {alert("Something went wrong please try again")});
     }
 
+    const handleSettingsPress = (keyName) => {
+        navigation.navigate(keyName);
+    }
 
     return (
         <View>
             <FlatList
+                style={styles.flcontainer}
                 data={[
                 {key: 'Bills'},
                 {key: 'Budget'},
-                {key: 'Notifications'},
                 {key: 'Categories'},
                 ]}
                 renderItem={({item}) => 
                 <TouchableOpacity>
-                    <Text style={styles.settingsOptions}>{item.key}</Text>
+                    <Text style={styles.settingsOptions} onPress={() => handleSettingsPress(item.key)}>{item.key}</Text>
                 </TouchableOpacity>}
             />
             <View style={styles.container}>
-                <Button style={styles.signOutButton} onPress={handleSignOut} title='Sign Out'></Button>
+                <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut} >
+                    <Text style={{fontSize:'25', fontWeight:'bold', color: 'white'}}>Sign Out</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -52,12 +57,18 @@ const styles = StyleSheet.create({
         borderWidth: 0.5,
     },
     signOutButton: {
-        
+        backgroundColor: 'darkred',
+        borderRadius: 35,
+        height:50,
+        width: 150,
+        alignItems: 'center',
+        paddingTop: 10,
     },
     container: {
-        justifyContent: 'flex-end',
-        marginBottom: 36,
-        
+        alignItems: 'center',  
+    },
+    flcontainer: {
+        height: "85%"
     }
 })
 
