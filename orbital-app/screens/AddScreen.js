@@ -95,7 +95,7 @@ const AddScreen = () => {
             // add items to front of array
             oldData.unshift(newExpense);
             sessionStorage.setItem('dummyExpenses', oldData);
-            console.info(sessionStorage.getItem('dummyExpenses'))
+            //console.info(sessionStorage.getItem('dummyExpenses'))
             setEnteredAmount("0.00");
             setEnteredDate(new Date());
             setEnteredTitle("");

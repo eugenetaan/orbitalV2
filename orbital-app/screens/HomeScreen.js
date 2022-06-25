@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, RefreshControl } from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import { sessionStorage } from '../localstorage'
 import { db } from '../Firebase'
@@ -14,10 +14,21 @@ let DUMMY = [
 
 sessionStorage.setItem("dummyExpenses", DUMMY);
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const HomeScreen = () => {
     const navigation = useNavigation();
     const [username, setUsername] = useState("");
+    const [isFetching, setIsFetching] = React.useState(false);
+    const [recents, setRecents] = useState(sessionStorage.getItem('dummyExpenses'));
     var currentUserEmail = sessionStorage.getItem("email");
+
+    const onRefresh = async () => {
+        setIsFetching(true);
+        await sleep(1000);
+        setRecents(sessionStorage.getItem('dummyExpenses'));
+        setIsFetching(false);
+      };
 
     useEffect(() => {
         let name = "";
@@ -58,7 +69,12 @@ const HomeScreen = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={{height: "90%"}}>
-                    <FlatList style={styles.list} data= {sessionStorage.getItem("dummyExpenses")}
+                    <FlatList style={styles.list} data={recents}
+                        refreshControl={
+                            <RefreshControl
+                                onRefresh={onRefresh}
+                                refreshing={isFetching}
+                            />}
                         renderItem={({item}) => (
                             <View style={styles.items}>
                                 <View style={styles.itemCard}>

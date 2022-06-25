@@ -6,11 +6,14 @@ import { sessionStorage } from '../localstorage'
 const ProfileScreen = () => {
     const navigation = useNavigation();
 
+    var budgetAmount = sessionStorage.getItem('currentBudget')
+
     const handleSettingsPress = () => {
         navigation.navigate('Settings')
     }
 
 
+    // changed you have saved this month to calculate budget - expenses
     // style={{backgroundColor: '#E5E5E5'}}
     return (
     <View>

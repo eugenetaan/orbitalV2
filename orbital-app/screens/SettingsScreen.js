@@ -8,7 +8,7 @@ import { sessionStorage } from "../localstorage";
 const SettingsScreen = () => {
     const navigation = useNavigation();
 
-    // include code to update everything to db
+    // include code to update everything eg expenses/budget/categories to db
     const handleSignOut = () => {
         auth
             .signOut()
