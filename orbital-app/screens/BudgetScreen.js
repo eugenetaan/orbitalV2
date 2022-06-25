@@ -11,7 +11,8 @@ sessionStorage.setItem("currentBudget", currentBudget)
 
 const BudgetScreen = () => {
     const [budget, setBudget] = useState("0.00")
-
+    const [month, setMonth] = useState(new Date())
+    
 
     const handleConfirm = () => {
 

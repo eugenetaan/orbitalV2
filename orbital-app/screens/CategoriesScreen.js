@@ -1,13 +1,88 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TextInput, FlatList } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+import { sessionStorage } from '../localstorage'
 
 const CategoriesScreen = () => {
+    [categories, setCategories] = useState(sessionStorage.getItem('dummyCats'));
+    [newCat, setNewCat] = useState("");
+
+
+    const handleAddPress = (exisitingCats) => {
+        if (newCat.length == 0) {
+            alert("Category cannot be blank")
+        } else {
+            var updatedCats = [{ 'value' : newCat}, ...exisitingCats];
+            setCategories(updatedCats)
+            sessionStorage.setItem('dummyCats', updatedCats);
+            setNewCat("");
+            console.log(sessionStorage.getItem('dummyCats'))
+            alert('Category Successfully Added')
+        }
+    }
 
     return (
     <View>
-        <Text>Categories</Text>
+        <View styles={styles.viewingArea}>
+            <Text style={{fontSize:"20", textAlign:"center"}}>Current Categories</Text>
+            <FlatList style={styles.categoriesList} data={categories} 
+                renderItem={({item}) => (
+                    <View style={styles.categoryItem}>
+                        <Text  style={{fontSize:"20"}}>{item.value}</Text>
+                    </View>
+                )}
+            ></FlatList>
+        </View>
+        <View style={styles.inputArea}>
+            <Text style={{fontSize:"20", textAlign:"center"}}>Add Your Custom Category!</Text>
+            <TextInput 
+                placeholder='Insert New Cat Here'
+                value = {newCat}
+                onChangeText = {text => setNewCat(text)}
+                style={styles.newCatInput} 
+            />
+            <TouchableOpacity style={styles.confirmInputCatButton} onPress={() => handleAddPress(categories)}>
+                <Text>Add New Category</Text>
+            </TouchableOpacity>
+        </View>
     </View>
     )
 }
 
 export default CategoriesScreen;
+
+const styles = StyleSheet.create({
+    categoryItem: {
+        alignItems: 'center',
+        backgroundColor: 'white',
+        borderColor: 'black',
+        borderWidth: 0.5,
+        width: "90%",
+        marginLeft: '5%',
+        borderRadius:10,
+    },
+    newCatInput: {
+        backgroundColor: "white",
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop:5,        
+    },
+    confirmInputCatButton: {
+        backgroundColor: "#5F7DDE",
+        width: 150,
+        alignItems: 'center',
+        borderRadius: 20,
+        height:50,
+        paddingTop: 12,
+        alignSelf: 'center',
+        marginTop: 20 
+    },
+    inputArea: {
+        marginTop: 100
+    },
+    viewingArea: {
+        
+    }
+
+})

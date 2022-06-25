@@ -15,6 +15,11 @@ const AddScreen = () => {
     const [selectedCat, setSelectedCat] = useState("Transport");
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+    var catsAvailable = sessionStorage.getItem('dummyCats')
+
+    console.log(sessionStorage.getItem('dummyCats'))
+    console.log(catsAvailable)
+
     const showDatePicker = () => {
       setDatePickerVisibility(true);
     };
@@ -126,7 +131,7 @@ const AddScreen = () => {
                 <View style={styles.amountView}>
                     <Text style={styles.amountText}>{enteredAmount}</Text>
                 </View>
-                <Dropdown label='Categories' data={DummyCats} onChangeText={value => setSelectedCat(value)} value={selectedCat}></Dropdown>
+                <Dropdown label='Categories' data={catsAvailable} onChangeText={value => setSelectedCat(value)} value={selectedCat}></Dropdown>
             </View>
         </View>
         <View style={styles.inputArea}>
