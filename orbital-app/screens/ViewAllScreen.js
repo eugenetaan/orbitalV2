@@ -7,7 +7,9 @@ let openedBefore;
 
 const ViewAllScreen = () => {
     expensesData = sessionStorage.getItem("dummyExpenses");
-    const [expenses, setExpenses] = useState(sessionStorage.getItem("dummyExpenses"));
+    const [expenses, setExpenses] = useState(sessionStorage.getItem("dummyExpenses")).sort(function(a,b) {
+      return b.date - a.date;
+    });
 
     if (!openedBefore===true) {
         alert("You can delete expenses by swiping right!");
@@ -53,13 +55,14 @@ const ViewAllScreen = () => {
 
         return(
           <Swipeable renderRightActions={swipeRight} rightThreshold={-200} onSwipeableOpen={handleDeleteExpense}>
-            <Animated.View style={{flex:1,flexDirection:'row', height:70, alignItems:'center',borderBottomWidth:1,backgroundColor:'grey'}}>
+            <Animated.View style={{borderBottomWidth:1,backgroundColor:'grey'}}>
                 <View style={styles.items}>
                     <View style={styles.itemCard}>
                         <View>
                             <Text style={styles.expenseTitle}>{title}</Text>
                             <Text style={styles.expenseCategory}>{cat}</Text>
                         </View>
+                        <Text>{date.toISOString().slice(0,10)}</Text>
                         <Text style={styles.expenseAmount}>{amount}</Text>
                     </View>     
                 </View>
@@ -71,7 +74,8 @@ const ViewAllScreen = () => {
     return (
         <View style={{marginTop: 10}}>
                 <FlatList data={expenses}
-                    renderItem={({item}) => <ListItem expense={item}/>}            
+                  ListEmptyComponent={<View><Text style={{textAlign: 'center', marginTop: 70}}>No Expenses!</Text></View>}
+                  renderItem={({item}) => <ListItem expense={item}/>}            
                 />
         </View>
         )

@@ -1,30 +1,76 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TextInput } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Appearance, Button } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 
-var currentBudget = "120.00"
-
-sessionStorage.setItem("currentBudget", currentBudget)
+sessionStorage.setItem("currentBudget", "No Budget Set")
+sessionStorage.setItem('budgetStartDate', null)
+sessionStorage.setItem('budgetEndDate', null)
 
 
 const BudgetScreen = () => {
     const [budget, setBudget] = useState("0.00")
-    const [month, setMonth] = useState(new Date())
-    
+    const [currentBudget, setCurrentBudget] = useState(sessionStorage.getItem('currentBudget'))
+    const [budgetStartDate, setBudgetStartDate] = useState(new Date())
+    const [budgetEndDate, setBudgetEndDate] = useState(new Date())
+    const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
+    const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
+    const [currentBudgetStart, setCurrentBudgetStart] = useState(sessionStorage.getItem('budgetStartDate') != null ? sessionStorage.getItem('budgetStartDate') : new Date())
+    const [currentBudgetEnd, setCurrentBudgetEnd] = useState(sessionStorage.getItem('budgetEndDate') != null ? sessionStorage.getItem('budgetEndDate') : new Date())
 
     const handleConfirm = () => {
-
-
         if (budget == "0.00") {
             alert("Budget Must Be Greater Than 0")
+        } else if (budgetEndDate <= budgetStartDate) {
+            // console.log(budgetStartDate.toISOString())
+            // console.log(budgetEndDate.toISOString())
+            alert("Budget Start Date must be earlier than Budget End Date")
         } else {
             sessionStorage.setItem('currentBudget', budget)
+            sessionStorage.setItem('budgetStartDate', budgetStartDate)
+            sessionStorage.setItem('budgetEndDate', budgetEndDate)
+            setCurrentBudget(budget)
+            setCurrentBudgetStart(budgetStartDate)
+            setCurrentBudgetEnd(budgetEndDate)
             setBudget("0.00")
             alert('Successfully Changed Budget')
         }
     }
+
+    function isNumeric(num){
+        return !isNaN(num)
+      }
+
+    const showStartDatePicker = () => {
+        setStartDatePickerVisibility(true);
+      };
+
+    const showEndDatePicker = () => {
+        setEndDatePickerVisibility(true);
+      };
+    
+    const hideStartDatePicker = () => {
+        setStartDatePickerVisibility(false);
+      };
+
+    const hideEndDatePicker = () => {
+        setEndDatePickerVisibility(false);
+      };
+
+
+    const handleSelectStartDate = (date) => {
+        //console.warn("A date has been picked: ", date);
+        setBudgetStartDate(date);
+        hideStartDatePicker();
+    };
+
+    const handleSelectEndDate = (date) => {
+        console.warn("A date has been picked: ", date);
+        setBudgetEndDate(date);
+        hideEndDatePicker();
+      };
 
     const handleNumberPress = (buttonValue) => {
         if (budget==="0.00") {
@@ -57,16 +103,31 @@ const BudgetScreen = () => {
         <Text style={styles.title}>Set Your Budget for the Month!</Text>
         <View style={styles.displayBudget}>
             <Text style={{fontSize: 25, marginBottom: 10}}>Current Budget</Text>
-            <Text style={{fontSize: 35, color:'green'}}>${sessionStorage.getItem('currentBudget')}</Text>
+            <Text style={{fontSize: 25, marginBottom: 10}}>For {currentBudgetStart.toISOString().slice(0,10)} to {currentBudgetEnd.toISOString().slice(0,10)}</Text>
+            <Text style={{fontSize: 35, color:'green'}}>{isNumeric(currentBudget) ? "$" : ""}{currentBudget}</Text>
         </View>
-        {/* <View style={styles.budgetInputContainer}>
-            <TextInput
-                placeholder="Budget"
-                value = {budget}
-                onChangeText = {text => setBudget(text)}
-                style={styles.budgetInput}    
-            /> 
-        </View> */}
+        <View style={styles.budgetDateContainer}>
+            <Text style={styles.dateStyle}>Start Date:  {budgetStartDate.toISOString().slice(0,10)}</Text>
+            <Button style={{marginRight: 30}} title="Select Date" onPress={showStartDatePicker} />
+            <DateTimePickerModal
+                            isVisible={isStartDatePickerVisible}
+                            mode="date"
+                            onConfirm={handleSelectStartDate}
+                            onCancel={hideStartDatePicker}
+                            isDarkModeEnabled={Appearance.getColorScheme() === 'dark' ? true : false}
+            />
+        </View>
+        <View style={styles.budgetDateContainer}>
+            <Text style={styles.dateStyle}>End Date:  {budgetEndDate.toISOString().slice(0,10)}</Text>
+            <Button style={{marginRight: 30}} title="Select Date" onPress={showEndDatePicker} />
+            <DateTimePickerModal
+                            isVisible={isEndDatePickerVisible}
+                            mode="date"
+                            onConfirm={handleSelectEndDate}
+                            onCancel={hideEndDatePicker}
+                            isDarkModeEnabled={Appearance.getColorScheme() === 'dark' ? true : false}
+            />
+        </View>
         <View style={styles.budgetInputView}>
                 <Text style={styles.budgetText}>{budget}</Text>
         </View>
@@ -115,11 +176,12 @@ const styles = StyleSheet.create({
         fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginTop: 40,
+        marginTop: 10,
     },
     displayBudget: {
         alignItems: 'center',
-        marginTop: 20
+        marginTop: 10,
+        marginBottom: 10
     },
     budgetInputContainer: {
         marginTop: 50
@@ -149,7 +211,7 @@ const styles = StyleSheet.create({
         paddingTop: 20
     },
     numberButtonText : {
-        fontSize: 35,
+        fontSize: 30,
     },
     budgetInputView: {
         backgroundColor: 'white',
@@ -157,10 +219,18 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginHorizontal: 20,
         marginBottom: 20,
-        marginTop: 20,
     },
     budgetText: {
         fontSize: 40
     },
+    budgetDateContainer: {
+        flexDirection:"row",
+        justifyContent:"space-between",
+        marginTop: 10
+    },
+    dateStyle: {
+        marginLeft: 10,
+        fontSize: 20
+    }
 
 })

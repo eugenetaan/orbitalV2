@@ -5,13 +5,15 @@ import { sessionStorage } from '../localstorage'
 import { db } from '../Firebase'
 import Tabs from '../navigator/navbar'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
+import { calcRemaingBudget, calcTotalExpensesDuringBudgetDates} from "../components/budgetCalcFunctions"
 
 
 let DUMMY = [
-    {title: "netflix", cat:"entertainment", amount:"10.99", date:"10-10-2022", key:1},
-    {title: "spotify", cat:"music", amount:"10.99", date:"10-10-2022", key:2}
+    {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
+    {title: "spotify", cat:"music", amount:"10.99", date:new Date(), key:2}
 ]
 
+sessionStorage.setItem("currentBudget", "No Budget Set")
 sessionStorage.setItem("dummyExpenses", DUMMY);
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -19,9 +21,28 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const HomeScreen = () => {
     const navigation = useNavigation();
     const [username, setUsername] = useState("");
-    const [isFetching, setIsFetching] = React.useState(false);
-    const [recents, setRecents] = useState(sessionStorage.getItem('dummyExpenses'));
+    const [isFetching, setIsFetching] = useState(false);
+    const [remainingBudget, setRemainingBudget] = useState(calcRemaingBudget())
+    const [recents, setRecents] = useState(sessionStorage.getItem("dummyExpenses")).sort(function(a,b) {
+        return b.date - a.date;
+      });
     var currentUserEmail = sessionStorage.getItem("email");
+
+    
+    // allows state to update upon screen focus ( very useful!!)
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setRemainingBudget(calcRemaingBudget());
+        });
+        
+        return unsubscribe;
+    }, [navigation]);
+    
+    function isNumeric(num){
+        return !isNaN(num)
+      }
+            
+
 
     const onRefresh = async () => {
         setIsFetching(true);
@@ -59,7 +80,8 @@ const HomeScreen = () => {
                 </View>
             </View>
             <View style={styles.chart}>
-                <Text style={{paddingLeft:"28%"}}>PlaceHolder for PIECHART</Text>
+                <Text style={{textAlign: 'center', fontSize:20, fontWeight: 'bold', marginBottom: 20}}>Remaining Budget:</Text>
+                <Text style={{textAlign: 'center', color: parseFloat(remainingBudget) > 0 ? 'green' : "red", fontSize: 30, fontWeight: 'bold'}}>{isNumeric(remainingBudget) ? "$" : ""}{remainingBudget}</Text>
             </View>
             <View style={styles.recents}>
                 <View style={styles.recentTopBarContainer}>
@@ -70,6 +92,7 @@ const HomeScreen = () => {
                 </View>
                 <View style={{height: "90%"}}>
                     <FlatList style={styles.list} data={recents}
+                        ListEmptyComponent={<View><Text style={{textAlign: 'center', marginTop: 70}}>No Recent Expenses!</Text></View>}
                         refreshControl={
                             <RefreshControl
                                 onRefresh={onRefresh}

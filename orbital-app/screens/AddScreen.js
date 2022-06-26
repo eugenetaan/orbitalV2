@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Button, Appearance
 import { sessionStorage } from '../localstorage'
 import { Dropdown } from 'react-native-material-dropdown-v2'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
+import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/core';
 
 const DummyCats = [ {value: "Food"}, {value: "Entertainment"}, {value :"Transport"}]
 
@@ -14,11 +16,22 @@ const AddScreen = () => {
     const [enteredDate, setEnteredDate] = useState(new Date());
     const [selectedCat, setSelectedCat] = useState("Transport");
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [catsAvailable, setCatsAvailable] = useState(sessionStorage.getItem('dummyCats'))
+    const isFocused = useIsFocused();
+    const navigation = useNavigation();
+    // console.log(sessionStorage.getItem('dummyCats'))
 
-    var catsAvailable = sessionStorage.getItem('dummyCats')
 
-    console.log(sessionStorage.getItem('dummyCats'))
-    console.log(catsAvailable)
+    // allows state to update upon screen focus ( very useful!!)
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setCatsAvailable(sessionStorage.getItem('dummyCats'));
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
+
+        
 
     const showDatePicker = () => {
       setDatePickerVisibility(true);
@@ -29,7 +42,7 @@ const AddScreen = () => {
     };
 
     const handleConfirm = (date) => {
-        console.warn("A date has been picked: ", date);
+        //console.warn("A date has been picked: ", date);
         setEnteredDate(date);
         hideDatePicker();
       };
@@ -99,7 +112,10 @@ const AddScreen = () => {
             var oldData = sessionStorage.getItem('dummyExpenses');
             // add items to front of array
             oldData.unshift(newExpense);
-            sessionStorage.setItem('dummyExpenses', oldData);
+            var newData = oldData.sort(function(a,b) {
+                return b.date - a.date;
+              });
+            sessionStorage.setItem('dummyExpenses', newData);
             //console.info(sessionStorage.getItem('dummyExpenses'))
             setEnteredAmount("0.00");
             setEnteredDate(new Date());

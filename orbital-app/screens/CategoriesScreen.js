@@ -8,15 +8,16 @@ const CategoriesScreen = () => {
     [newCat, setNewCat] = useState("");
 
 
-    const handleAddPress = (exisitingCats) => {
+    const handleAddPress = (existingCats) => {
         if (newCat.length == 0) {
             alert("Category cannot be blank")
         } else {
-            var updatedCats = [{ 'value' : newCat}, ...exisitingCats];
+            var updatedCats = [{ 'value' : newCat}, ...existingCats];
             setCategories(updatedCats)
             sessionStorage.setItem('dummyCats', updatedCats);
             setNewCat("");
             console.log(sessionStorage.getItem('dummyCats'))
+            console.log("test")
             alert('Category Successfully Added')
         }
     }

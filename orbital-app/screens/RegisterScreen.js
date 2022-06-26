@@ -22,15 +22,19 @@ const RegisterScreen = ({ navigation }) => {
 
 
   const register = () => {
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(db.collection("profiles").doc(email).set({
-        email: email,
-        username: username,      
-      }))
-      .then(() => alert("Successfully Registered"))
-      .then(() => {navigation.navigate("Login")})
-      .catch((err) => alert(err.message));
+    if (username.length == 0 || password.length == 0 || email.length == 0) {
+      alert("Please fill in all required fields!")
+    } else {
+      auth
+        .createUserWithEmailAndPassword(email, password)
+        .then(db.collection("profiles").doc(email).set({
+          email: email,
+          username: username,      
+        }))
+        .then(() => alert("Successfully Registered"))
+        .then(() => {navigation.navigate("Login")})
+        .catch((err) => alert(err.message));
+    }
   };
 
   return (
