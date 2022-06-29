@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Button, FlatList } from 'reac
 import { useNavigation } from '@react-navigation/core';
 import { auth } from "../Firebase";
 import { sessionStorage } from "../localstorage";
+import { db } from '../Firebase'
 
 
 const SettingsScreen = () => {
@@ -12,13 +13,30 @@ const SettingsScreen = () => {
     const handleSignOut = () => {
         auth
             .signOut()
+            .then(logDataToDB())
             .then(() => {navigation.navigate("Login")})
             .catch((error) => {alert("Something went wrong please try again")});
     }
 
+    
+    const logDataToDB = () => {
+        var currentUserEmail = sessionStorage.getItem('email')
+        var expensesNew = sessionStorage.getItem('expenses')
+        var budgetNew = sessionStorage.getItem('budget')
+        var budgetStartDateNew = sessionStorage.getItem('budgetStartDate').toISOString()
+        var budgetEndDateNew = sessionStorage.getItem('budgetEndDate').toISOString()
+        var categoriesNew = sessionStorage.getItem('Cats')
 
-    use
-
+        db.collection('profiles')
+        .doc(currentUserEmail)
+        .update({
+            budget : budgetNew,
+            budgetStartDate : budgetStartDateNew,
+            budgetEndDate : budgetEndDateNew,
+            categories : categoriesNew,
+            expenses : expensesNew
+        })
+    }    
 
     const handleSettingsPress = (keyName) => {
         navigation.navigate(keyName);

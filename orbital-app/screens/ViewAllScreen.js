@@ -6,8 +6,8 @@ import { sessionStorage } from '../localstorage'
 let openedBefore;
 
 const ViewAllScreen = () => {
-    expensesData = sessionStorage.getItem("dummyExpenses");
-    const [expenses, setExpenses] = useState(sessionStorage.getItem("dummyExpenses")).sort(function(a,b) {
+    expensesData = sessionStorage.getItem("expenses");
+    const [expenses, setExpenses] = useState(sessionStorage.getItem("expenses")).sort(function(a,b) {
       return b.date - a.date;
     });
 
@@ -21,7 +21,8 @@ const ViewAllScreen = () => {
     const ListItem = (expense) => {
         const { amount, cat, date, key, title} = expense.expense;
 
-
+        // console.log(expense)
+        // console.log(date.slice(0,10))
         //const height = new Animated.Value(70)
         // const animatedDelete=() => {
         //     Animated.timing(height,{
@@ -35,7 +36,7 @@ const ViewAllScreen = () => {
             var newExpenses = expenses.filter(function(exp){
                 return exp.key !== key;
             })
-            sessionStorage.setItem('dummyExpenses', newExpenses);
+            sessionStorage.setItem('expenses', newExpenses);
             setExpenses(newExpenses);
         } 
     
@@ -62,7 +63,7 @@ const ViewAllScreen = () => {
                             <Text style={styles.expenseTitle}>{title}</Text>
                             <Text style={styles.expenseCategory}>{cat}</Text>
                         </View>
-                        <Text>{date.toISOString().slice(0,10)}</Text>
+                        <Text>{date.slice(0,10)}</Text>
                         <Text style={styles.expenseAmount}>{amount}</Text>
                     </View>     
                 </View>

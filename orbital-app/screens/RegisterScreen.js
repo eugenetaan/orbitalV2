@@ -29,7 +29,12 @@ const RegisterScreen = ({ navigation }) => {
         .createUserWithEmailAndPassword(email, password)
         .then(db.collection("profiles").doc(email).set({
           email: email,
-          username: username,      
+          username: username,
+          categories: [ {value: "Food"}, {value: "Entertainment"}, {value :"Transport"}, {value :"Health"}, {value :"Other"}],
+          expenses: [],
+          budget: "No Budget Set",
+          budgetStartDate: new Date().toISOString(),
+          budgetEndDate: new Date().toISOString()
         }))
         .then(() => alert("Successfully Registered"))
         .then(() => {navigation.navigate("Login")})

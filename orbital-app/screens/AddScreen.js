@@ -6,9 +6,9 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/core';
 
-const DummyCats = [ {value: "Food"}, {value: "Entertainment"}, {value :"Transport"}]
+//const DummyCats = [ {value: "Food"}, {value: "Entertainment"}, {value :"Transport"}]
 
-sessionStorage.setItem('dummyCats', DummyCats)
+//sessionStorage.setItem('categories', DummyCats)
 
 const AddScreen = () => {
     const [enteredTitle, setEnteredTitle] = useState("");
@@ -16,7 +16,7 @@ const AddScreen = () => {
     const [enteredDate, setEnteredDate] = useState(new Date());
     const [selectedCat, setSelectedCat] = useState("Transport");
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [catsAvailable, setCatsAvailable] = useState(sessionStorage.getItem('dummyCats'))
+    const [catsAvailable, setCatsAvailable] = useState(sessionStorage.getItem('Cats'))
     const isFocused = useIsFocused();
     const navigation = useNavigation();
     // console.log(sessionStorage.getItem('dummyCats'))
@@ -25,13 +25,13 @@ const AddScreen = () => {
     // allows state to update upon screen focus ( very useful!!)
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-            setCatsAvailable(sessionStorage.getItem('dummyCats'));
+            setCatsAvailable(sessionStorage.getItem('Cats'));
         });
     
         return unsubscribe;
       }, [navigation]);
 
-        
+    
 
     const showDatePicker = () => {
       setDatePickerVisibility(true);
@@ -99,7 +99,7 @@ const AddScreen = () => {
             title : enteredTitle,
             cat : selectedCat,
             amount : enteredAmount,
-            date : enteredDate,
+            date : enteredDate.toISOString(),
             key : Math.random()
         }
 
@@ -108,14 +108,14 @@ const AddScreen = () => {
         } else if (enteredTitle==="") {
             alert('Title cannot be empty')
         } else {
-            console.info(sessionStorage.getItem('dummyExpenses'))
-            var oldData = sessionStorage.getItem('dummyExpenses');
+            //console.info(sessionStorage.getItem('expenses'))
+            var oldData = sessionStorage.getItem('expenses');
             // add items to front of array
             oldData.unshift(newExpense);
             var newData = oldData.sort(function(a,b) {
-                return b.date - a.date;
+                return new Date(b.date) - new Date(a.date);
               });
-            sessionStorage.setItem('dummyExpenses', newData);
+            sessionStorage.setItem('expenses', newData);
             //console.info(sessionStorage.getItem('dummyExpenses'))
             setEnteredAmount("0.00");
             setEnteredDate(new Date());

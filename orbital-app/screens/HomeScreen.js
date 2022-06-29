@@ -8,13 +8,13 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { calcRemaingBudget, calcTotalExpensesDuringBudgetDates} from "../components/budgetCalcFunctions"
 
 
-let DUMMY = [
-    {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
-    {title: "spotify", cat:"music", amount:"10.99", date:new Date(), key:2}
-]
+// let DUMMY = [
+//     {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
+//     {title: "spotify", cat:"music", amount:"10.99", date:new Date(), key:2}
+// ]
 
-sessionStorage.setItem("currentBudget", "No Budget Set")
-sessionStorage.setItem("dummyExpenses", DUMMY);
+// sessionStorage.setItem("currentBudget", "No Budget Set")
+// sessionStorage.setItem("dummyExpenses", DUMMY);
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -23,7 +23,7 @@ const HomeScreen = () => {
     const [username, setUsername] = useState("");
     const [isFetching, setIsFetching] = useState(false);
     const [remainingBudget, setRemainingBudget] = useState(calcRemaingBudget())
-    const [recents, setRecents] = useState(sessionStorage.getItem("dummyExpenses")).sort(function(a,b) {
+    const [recents, setRecents] = useState(sessionStorage.getItem("expenses")).sort(function(a,b) {
         return b.date - a.date;
       });
     var currentUserEmail = sessionStorage.getItem("email");
@@ -43,26 +43,71 @@ const HomeScreen = () => {
       }
             
 
-
     const onRefresh = async () => {
         setIsFetching(true);
         await sleep(1000);
-        setRecents(sessionStorage.getItem('dummyExpenses'));
+        setRecents(sessionStorage.getItem('expenses'));
         setIsFetching(false);
       };
 
+    // get username from db  
     useEffect(() => {
-        let name = "";
+        let name;
         const user = db.collection('profiles')
             .doc(currentUserEmail)
             .get()
             .then((doc) => {
-                console.log(doc.data());
+                //console.log(doc.data());
                 name = doc.data().username;
                 setUsername(name);
                 sessionStorage.setItem('username', name);
             })
     }, [])
+
+    // get categories
+    useEffect(() => {
+        let cats;
+        const user = db.collection('profiles')
+            .doc(currentUserEmail)
+            .get()
+            .then((doc) => {
+                cats = doc.data().categories;
+                sessionStorage.setItem('Cats', cats);
+            })
+    }, [])
+
+
+    // get budget
+    // useEffect(() => {
+    //         let budget;
+    //         const user = db.collection('profiles')
+    //             .doc(currentUserEmail)
+    //             .get()
+    //             .then((doc) => {
+    //                 //budget = doc.data().budget;
+    //                 console.log(budget)
+    //                 startDate = doc.data().budgetStartDate;
+    //                 endDate = doc.date().budgetEndDate;
+    //                 sessionStorage.setItem('budget', budget);
+    //                 sessionStorage.setItem('budgetStartDate', startDate);
+    //                 sessionStorage.setItem('budgetEndDate', endDate);
+    //             })
+    //     }, [])
+
+    // get expenses
+    // useEffect(() => {
+    //         let expenses;
+    //         const user = db.collection('profiles')
+    //             .doc(currentUserEmail)
+    //             .get()
+    //             .then((doc) => {
+    //                 expenses = doc.data().expenses;
+    //                 sessionStorage.setItem('expenses', expenses);
+    //             })
+    //     }, [])
+
+
+    
 
     const handleViewAll = () => {
         navigation.navigate("ViewAll")
