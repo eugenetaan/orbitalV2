@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
 
 const CategoriesScreen = () => {
-    [categories, setCategories] = useState(sessionStorage.getItem('dummyCats'));
+    [categories, setCategories] = useState(sessionStorage.getItem('Cats'));
     [newCat, setNewCat] = useState("");
 
 
@@ -14,26 +14,12 @@ const CategoriesScreen = () => {
         } else {
             var updatedCats = [{ 'value' : newCat}, ...existingCats];
             setCategories(updatedCats)
-            sessionStorage.setItem('dummyCats', updatedCats);
+            sessionStorage.setItem('Cats', updatedCats);
             setNewCat("");
-            console.log(sessionStorage.getItem('dummyCats'))
-            console.log("test")
+            console.log(sessionStorage.getItem('Cats'))
             alert('Category Successfully Added')
         }
     }
-    
-    // useEffect(() => {
-    //     let name = ;
-    //     const user = db.collection('profiles')
-    //         .doc(currentUserEmail)
-    //         .get()
-    //         .then((doc) => {
-    //             console.log(doc.data());
-    //             name = doc.data().username;
-    //             setUsername(name);
-    //             sessionStorage.setItem('username', name);
-    //         })
-    // }, [])
 
     return (
     <View>

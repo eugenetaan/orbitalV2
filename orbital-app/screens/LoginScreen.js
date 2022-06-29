@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { auth } from "../Firebase";
 import { sessionStorage } from "../localstorage";
+import { db } from '../Firebase'
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('')
@@ -32,8 +33,42 @@ const LoginScreen = () => {
         auth
             .signInWithEmailAndPassword(email, password)  
             .then(sessionStorage.setItem("email", email))
+            .then(setExpenses())
+            .then(initBudget())
             .then(() => navigation.navigate("Home"))
             .catch(error=> alert(error.message))
+    }
+
+    // get expenses
+    function setExpenses() {
+            let expenses;
+            const user = db.collection('profiles')
+                .doc(email)
+                .get()
+                .then((doc) => {
+                    //console.log(email)
+                    expenses = doc.data().expenses;
+                    console.log(expenses)
+                    sessionStorage.setItem('expenses', expenses);
+                })
+    }
+
+    // init budget
+    const initBudget =() => {
+        let budget;
+        const user = db.collection('profiles')
+            .doc(email)
+            .get()
+            .then((doc) => {
+                budget = doc.data().budget;
+                //console.log(budget)
+                startDate = new Date(doc.data().budgetStartDate);
+                console.log(doc.data())
+                endDate = new Date(doc.data().budgetEndDate);
+                sessionStorage.setItem('budget', budget);
+                sessionStorage.setItem('budgetStartDate', startDate);
+                sessionStorage.setItem('budgetEndDate', endDate);
+            })
     }
 
 

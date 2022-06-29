@@ -5,20 +5,20 @@ import { sessionStorage } from '../localstorage'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 
-sessionStorage.setItem("currentBudget", "No Budget Set")
-sessionStorage.setItem('budgetStartDate', null)
-sessionStorage.setItem('budgetEndDate', null)
+// sessionStorage.setItem("currentBudget", "No Budget Set")
+// sessionStorage.setItem('budgetStartDate', null)
+// sessionStorage.setItem('budgetEndDate', null)
 
 
 const BudgetScreen = () => {
     const [budget, setBudget] = useState("0.00")
-    const [currentBudget, setCurrentBudget] = useState(sessionStorage.getItem('currentBudget'))
+    const [currentBudget, setCurrentBudget] = useState(sessionStorage.getItem('budget'))
     const [budgetStartDate, setBudgetStartDate] = useState(new Date())
     const [budgetEndDate, setBudgetEndDate] = useState(new Date())
     const [isStartDatePickerVisible, setStartDatePickerVisibility] = useState(false);
     const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-    const [currentBudgetStart, setCurrentBudgetStart] = useState(sessionStorage.getItem('budgetStartDate') != null ? sessionStorage.getItem('budgetStartDate') : new Date())
-    const [currentBudgetEnd, setCurrentBudgetEnd] = useState(sessionStorage.getItem('budgetEndDate') != null ? sessionStorage.getItem('budgetEndDate') : new Date())
+    const [currentBudgetStart, setCurrentBudgetStart] = useState(sessionStorage.getItem('budgetStartDate'))// != null ? sessionStorage.getItem('budgetStartDate') : new Date())
+    const [currentBudgetEnd, setCurrentBudgetEnd] = useState(sessionStorage.getItem('budgetEndDate'))// != null ? sessionStorage.getItem('budgetEndDate') : new Date())
 
     const handleConfirm = () => {
         if (budget == "0.00") {
@@ -28,7 +28,7 @@ const BudgetScreen = () => {
             // console.log(budgetEndDate.toISOString())
             alert("Budget Start Date must be earlier than Budget End Date")
         } else {
-            sessionStorage.setItem('currentBudget', budget)
+            sessionStorage.setItem('budget', budget)
             sessionStorage.setItem('budgetStartDate', budgetStartDate)
             sessionStorage.setItem('budgetEndDate', budgetEndDate)
             setCurrentBudget(budget)
