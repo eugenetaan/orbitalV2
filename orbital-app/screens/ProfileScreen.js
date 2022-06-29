@@ -5,6 +5,7 @@ import { sessionStorage } from '../localstorage'
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
+    const [username, setUsername] = useState(sessionStorage.getItem('username'))
 
     var budgetAmount = sessionStorage.getItem('currentBudget')
 
@@ -25,12 +26,12 @@ const ProfileScreen = () => {
                     resizeMode="contain"
                 ></Image>
             </View>
-            <Text style={styles.userName}>Steven</Text>
+            <Text style={styles.userName}>{username}</Text>
         </View>
-        <View style={styles.totalSaved}>
+        {/* <View style={styles.totalSaved}>
             <Text style={{fontSize: 20, color:"grey"}}>Total Saved This Month</Text>
             <Text style={{fontSize: 40, color:"green"}}>$1234</Text>
-        </View>
+        </View> */}
         <View style={styles.buttonView}>
             <TouchableOpacity style={styles.profileButton}>
                 <Text style={{fontSize: 20, color:"white"}}>View Friends</Text>

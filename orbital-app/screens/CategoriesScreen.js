@@ -21,6 +21,19 @@ const CategoriesScreen = () => {
             alert('Category Successfully Added')
         }
     }
+    
+    // useEffect(() => {
+    //     let name = ;
+    //     const user = db.collection('profiles')
+    //         .doc(currentUserEmail)
+    //         .get()
+    //         .then((doc) => {
+    //             console.log(doc.data());
+    //             name = doc.data().username;
+    //             setUsername(name);
+    //             sessionStorage.setItem('username', name);
+    //         })
+    // }, [])
 
     return (
     <View>

@@ -16,6 +16,10 @@ const SettingsScreen = () => {
             .catch((error) => {alert("Something went wrong please try again")});
     }
 
+
+    use
+
+
     const handleSettingsPress = (keyName) => {
         navigation.navigate(keyName);
     }

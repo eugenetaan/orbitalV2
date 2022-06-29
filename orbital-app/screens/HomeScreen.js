@@ -58,8 +58,9 @@ const HomeScreen = () => {
             .get()
             .then((doc) => {
                 console.log(doc.data());
-                name = doc.data.username;
+                name = doc.data().username;
                 setUsername(name);
+                sessionStorage.setItem('username', name);
             })
     }, [])
 
@@ -70,7 +71,7 @@ const HomeScreen = () => {
     return (
         <SafeAreaView style={styles.homeContainer}>
             <View style={styles.homeTopBar}>
-                <Text style={styles.greeting}>Hello, Steven!</Text>
+                <Text style={styles.greeting}>Hello, {username}!</Text>
                 <View style={StyleSheet.profileImage}>
                     <Image
                     source={require("../assets/testPhoto.jpg")}
