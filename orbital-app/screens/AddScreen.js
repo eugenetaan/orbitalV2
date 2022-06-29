@@ -124,6 +124,8 @@ const AddScreen = () => {
         }
     }
 
+    // timeZoneOffsetInMinutes={480} to experiment with datepickdr and utc one day off probs
+
     return (
     <View style={{backgroundColor:"E5E5E5"}}>
         <View style={styles.viewingArea}>
@@ -141,7 +143,7 @@ const AddScreen = () => {
                         mode="date"
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
-                        isDarkModeEnabled={Appearance.getColorScheme() === 'dark' ? true : false}
+                        isDarkModeEnabled={Appearance.getColorScheme() === 'dark' ? true : false}          
                     />
                 </View>
                 <View style={styles.amountView}>
