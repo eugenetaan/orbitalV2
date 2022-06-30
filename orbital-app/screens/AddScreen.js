@@ -5,6 +5,7 @@ import { Dropdown } from 'react-native-material-dropdown-v2'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/core';
+import { logExpenseToDB } from '../components/dbLogDataFunctions'
 
 //const DummyCats = [ {value: "Food"}, {value: "Entertainment"}, {value :"Transport"}]
 
@@ -116,6 +117,7 @@ const AddScreen = () => {
                 return new Date(b.date) - new Date(a.date);
               });
             sessionStorage.setItem('expenses', newData);
+            logExpenseToDB();
             //console.info(sessionStorage.getItem('dummyExpenses'))
             setEnteredAmount("0.00");
             setEnteredDate(new Date());

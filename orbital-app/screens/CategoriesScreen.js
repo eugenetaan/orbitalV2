@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, FlatList } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
+import { logCategoriesToDB } from '../components/dbLogDataFunctions'
 
 const CategoriesScreen = () => {
     [categories, setCategories] = useState(sessionStorage.getItem('Cats'));
@@ -16,8 +17,9 @@ const CategoriesScreen = () => {
             setCategories(updatedCats)
             sessionStorage.setItem('Cats', updatedCats);
             setNewCat("");
-            console.log(sessionStorage.getItem('Cats'))
-            alert('Category Successfully Added')
+            console.log(sessionStorage.getItem('Cats'));
+            logCategoriesToDB();
+            alert('Category Successfully Added');
         }
     }
 

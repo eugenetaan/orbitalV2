@@ -13,13 +13,13 @@ const SettingsScreen = () => {
     const handleSignOut = () => {
         auth
             .signOut()
-            .then(logDataToDB())
+            .then(logAllDataToDB())
             .then(() => {navigation.navigate("Login")})
             .catch((error) => {alert("Something went wrong please try again")});
     }
 
-    
-    const logDataToDB = () => {
+    // split into diff parta and update whenever something is updated    
+    const logAllDataToDB = () => {
         var currentUserEmail = sessionStorage.getItem('email')
         var expensesNew = sessionStorage.getItem('expenses')
         var budgetNew = sessionStorage.getItem('budget')
@@ -37,6 +37,7 @@ const SettingsScreen = () => {
             expenses : expensesNew
         })
     }    
+
 
     const handleSettingsPress = (keyName) => {
         navigation.navigate(keyName);

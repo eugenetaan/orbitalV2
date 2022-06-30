@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, FlatList, Button, Animated } from 'react-native'
 import { Swipeable } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
+import { logExpensesToDB } from '../components/dbLogDataFunctions'
 
 let openedBefore;
 
@@ -37,6 +38,7 @@ const ViewAllScreen = () => {
                 return exp.key !== key;
             })
             sessionStorage.setItem('expenses', newExpenses);
+            //logExpensesToDB();
             setExpenses(newExpenses);
         } 
     

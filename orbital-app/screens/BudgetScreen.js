@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, Appearance, Button } from 'react-nat
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
-
+import { logBudgetToDB } from '../components/dbLogDataFunctions'
 
 // sessionStorage.setItem("currentBudget", "No Budget Set")
 // sessionStorage.setItem('budgetStartDate', null)
@@ -31,6 +31,7 @@ const BudgetScreen = () => {
             sessionStorage.setItem('budget', budget)
             sessionStorage.setItem('budgetStartDate', budgetStartDate)
             sessionStorage.setItem('budgetEndDate', budgetEndDate)
+            logBudgetToDB();
             setCurrentBudget(budget)
             setCurrentBudgetStart(budgetStartDate)
             setCurrentBudgetEnd(budgetEndDate)

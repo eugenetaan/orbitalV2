@@ -5,8 +5,8 @@ import { sessionStorage } from '../localstorage'
 import { db } from '../Firebase'
 import Tabs from '../navigator/navbar'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { calcRemaingBudget, calcTotalExpensesDuringBudgetDates} from "../components/budgetCalcFunctions"
-
+import { calcRemaingBudget, calcTotalExpensesDuringBudgetDates} from "../components/budgetCalcFunctions";
+import { logExpensesToDB } from '../components/dbLogDataFunctions';
 
 // let DUMMY = [
 //     {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
@@ -27,9 +27,8 @@ const HomeScreen = () => {
         return b.date - a.date;
       });
     var currentUserEmail = sessionStorage.getItem("email");
-
     
-    // allows state to update upon screen focus ( very useful!!)
+   // allows state to update upon screen focus ( very useful!!)
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setRemainingBudget(calcRemaingBudget());
@@ -41,6 +40,22 @@ const HomeScreen = () => {
     function isNumeric(num){
         return !isNaN(num)
       }
+    
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            var expensesNew = sessionStorage.getItem('expenses')
+
+            db.collection('profiles')
+            .doc(currentUserEmail)
+            .update({
+                expenses: expensesNew
+            })
+        });
+        
+        return unsubscribe;
+    }, [navigation]);  
+
             
 
     const onRefresh = async () => {
@@ -50,7 +65,7 @@ const HomeScreen = () => {
         setIsFetching(false);
       };
 
-    // get username from db  
+    // get username from db init
     useEffect(() => {
         let name;
         const user = db.collection('profiles')
@@ -64,7 +79,7 @@ const HomeScreen = () => {
             })
     }, [])
 
-    // get categories
+    // get categories init
     useEffect(() => {
         let cats;
         const user = db.collection('profiles')
