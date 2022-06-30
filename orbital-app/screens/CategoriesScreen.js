@@ -26,17 +26,17 @@ const CategoriesScreen = () => {
     return (
     <View>
         <View styles={styles.viewingArea}>
-            <Text style={{fontSize:"20", textAlign:"center"}}>Current Categories</Text>
+            <Text style={{fontSize:20, textAlign:"center"}}>Current Categories</Text>
             <FlatList style={styles.categoriesList} data={categories} 
                 renderItem={({item}) => (
                     <View style={styles.categoryItem}>
-                        <Text  style={{fontSize:"20"}}>{item.value}</Text>
+                        <Text  style={{fontSize:20}}>{item.value}</Text>
                     </View>
                 )}
             ></FlatList>
         </View>
         <View style={styles.inputArea}>
-            <Text style={{fontSize:"20", textAlign:"center"}}>Add Your Custom Category!</Text>
+            <Text style={{fontSize:20, textAlign:"center"}}>Add Your Custom Category!</Text>
             <TextInput 
                 placeholder='Insert New Cat Here'
                 value = {newCat}

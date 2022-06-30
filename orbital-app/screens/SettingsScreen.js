@@ -59,7 +59,7 @@ const SettingsScreen = () => {
             />
             <View style={styles.container}>
                 <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut} >
-                    <Text style={{fontSize:'25', fontWeight:'bold', color: 'white'}}>Sign Out</Text>
+                    <Text style={{fontSize:25, fontWeight:'bold', color: 'white'}}>Sign Out</Text>
                 </TouchableOpacity>
             </View>
         </View>
