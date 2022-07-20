@@ -34,7 +34,8 @@ const RegisterScreen = ({ navigation }) => {
           expenses: [],
           budget: "No Budget Set",
           budgetStartDate: new Date().toISOString(),
-          budgetEndDate: new Date().toISOString()
+          budgetEndDate: new Date().toISOString(),
+          bills: []
         }))
         .then(() => alert("Successfully Registered"))
         .then(() => {navigation.navigate("Login")})

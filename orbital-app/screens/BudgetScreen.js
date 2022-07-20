@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TextInput, Appearance, Button } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Appearance, Button, SafeAreaView } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
-
+import { logBudgetToDB } from '../components/dbLogDataFunctions'
 
 // sessionStorage.setItem("currentBudget", "No Budget Set")
 // sessionStorage.setItem('budgetStartDate', null)
@@ -31,6 +31,7 @@ const BudgetScreen = () => {
             sessionStorage.setItem('budget', budget)
             sessionStorage.setItem('budgetStartDate', budgetStartDate)
             sessionStorage.setItem('budgetEndDate', budgetEndDate)
+            logBudgetToDB();
             setCurrentBudget(budget)
             setCurrentBudgetStart(budgetStartDate)
             setCurrentBudgetEnd(budgetEndDate)
@@ -99,11 +100,11 @@ const BudgetScreen = () => {
 
 
     return (
-    <View>
-        <Text style={styles.title}>Set Your Budget for the Month!</Text>
+    <SafeAreaView>
+        {/* <Text style={styles.title}>Set Your Budget for the Month!</Text> */}
         <View style={styles.displayBudget}>
             <Text style={{fontSize: 25, marginBottom: 10}}>Current Budget</Text>
-            <Text style={{fontSize: 25, marginBottom: 10}}>For {currentBudgetStart.toISOString().slice(0,10)} to {currentBudgetEnd.toISOString().slice(0,10)}</Text>
+            <Text style={{fontSize: 20, marginBottom: 10}}>For {currentBudgetStart.toISOString().slice(0,10)} to {currentBudgetEnd.toISOString().slice(0,10)}</Text>
             <Text style={{fontSize: 35, color:'green'}}>{isNumeric(currentBudget) ? "$" : ""}{currentBudget}</Text>
         </View>
         <View style={styles.budgetDateContainer}>
@@ -158,7 +159,7 @@ const BudgetScreen = () => {
                 <Text style={{fontSize: 25}} >Confirm</Text>
             </TouchableOpacity> */}
         {/* </View> */}
-    </View>
+    </SafeAreaView>
     )
 }
 
