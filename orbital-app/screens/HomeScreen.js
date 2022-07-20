@@ -32,11 +32,21 @@ const HomeScreen = () => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             setRemainingBudget(calcRemaingBudget());
+            setUsername(sessionStorage.getItem('username'))
+            //updateData();
         });
         
         return unsubscribe;
     }, [navigation]);
     
+
+    const updateData = () => {
+        setRecents(sessionStorage.getItem("expenses")).sort(function(a,b) {
+            return b.date - a.date;
+        })
+    }
+
+
     function isNumeric(num){
         return !isNaN(num)
       }
@@ -92,6 +102,19 @@ const HomeScreen = () => {
     }, [])
 
 
+    // get bills init 
+    useEffect(() => {
+        let bills;
+        const user = db.collection('profiles')
+            .doc(currentUserEmail)
+            .get()
+            .then((doc) => {
+                bills = doc.data().bills;
+                sessionStorage.setItem('bills', bills);
+            })
+    }, [])
+
+
     // get budget
     // useEffect(() => {
     //         let budget;
@@ -132,13 +155,13 @@ const HomeScreen = () => {
         <SafeAreaView style={styles.homeContainer}>
             <View style={styles.homeTopBar}>
                 <Text style={styles.greeting}>Hello, {username}!</Text>
-                <View style={StyleSheet.profileImage}>
+                {/* <View style={StyleSheet.profileImage}>
                     <Image
                     source={require("../assets/testPhoto.jpg")}
                     style={styles.image}
                     resizeMode="contain"
                     ></Image>
-                </View>
+                </View> */}
             </View>
             <View style={styles.chart}>
                 <Text style={{textAlign: 'center', fontSize:20, fontWeight: 'bold', marginBottom: 20}}>Remaining Budget:</Text>
@@ -187,7 +210,7 @@ const styles = StyleSheet.create({
     },
     homeTopBar: {
         flex: 1,
-        justifyContent: "space-between",
+        // justifyContent: "space-between",
         flexDirection: 'row',
     },
     greeting: {

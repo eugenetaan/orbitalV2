@@ -13,6 +13,16 @@ const logExpenseToDB = () => {
     })
 }
 
+const changeUsername = (newUsername) => {
+    var currentUserEmail = sessionStorage.getItem('email')
+
+    db.collection('profiles')
+    .doc(currentUserEmail)
+    .update({
+        username : newUsername
+    })
+}
+
 
 const logBudgetToDB = () => {
     var currentUserEmail = sessionStorage.getItem('email')
@@ -41,4 +51,17 @@ const logCategoriesToDB = () => {
 
 }
 
-export {logBudgetToDB, logCategoriesToDB, logExpenseToDB};
+
+const logBillsToDB = (billItem) => {
+    var currentUserEmail = sessionStorage.getItem('email')
+    var billsUpdated = sessionStorage.getItem('bills')
+
+    db.collection('profiles')
+    .doc(currentUserEmail)
+    .update({
+        bills : billsUpdated
+    })
+
+}
+
+export {logBudgetToDB, logCategoriesToDB, logExpenseToDB, changeUsername, logBillsToDB};

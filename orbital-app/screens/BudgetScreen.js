@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TextInput, Appearance, Button } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Appearance, Button, SafeAreaView } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
@@ -100,8 +100,8 @@ const BudgetScreen = () => {
 
 
     return (
-    <View>
-        <Text style={styles.title}>Set Your Budget for the Month!</Text>
+    <SafeAreaView>
+        {/* <Text style={styles.title}>Set Your Budget for the Month!</Text> */}
         <View style={styles.displayBudget}>
             <Text style={{fontSize: 25, marginBottom: 10}}>Current Budget</Text>
             <Text style={{fontSize: 25, marginBottom: 10}}>For {currentBudgetStart.toISOString().slice(0,10)} to {currentBudgetEnd.toISOString().slice(0,10)}</Text>
@@ -159,7 +159,7 @@ const BudgetScreen = () => {
                 <Text style={{fontSize: 25}} >Confirm</Text>
             </TouchableOpacity> */}
         {/* </View> */}
-    </View>
+    </SafeAreaView>
     )
 }
 

@@ -13,6 +13,9 @@ import SettingsScreen from './screens/SettingsScreen';
 import BillsScreen from './screens/BillsScreen';
 import BudgetScreen from './screens/BudgetScreen';
 import CategoriesScreen from './screens/CategoriesScreen';
+import ChangePasswordScreen from './screens/ChangePasswordScreen';
+import ChangeUsernameScreen from './screens/ChangeUsernameScreen';
+import AddBillScreen from './screens/AddBillScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,6 +31,9 @@ export default function App() {
         <Stack.Screen name="Bills" component={BillsScreen} />
         <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="Budget" component={BudgetScreen} />
+        <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+        <Stack.Screen name="ChangeUsername" component={ChangeUsernameScreen} />
+        <Stack.Screen name="AddBills" component={AddBillScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
