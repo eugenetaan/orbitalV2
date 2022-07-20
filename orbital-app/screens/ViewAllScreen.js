@@ -4,19 +4,12 @@ import { Swipeable } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
 import { logExpensesToDB } from '../components/dbLogDataFunctions'
 
-let openedBefore;
 
 const ViewAllScreen = () => {
     expensesData = sessionStorage.getItem("expenses");
     const [expenses, setExpenses] = useState(sessionStorage.getItem("expenses")).sort(function(a,b) {
       return b.date - a.date;
     });
-
-    if (!openedBefore===true) {
-        alert("You can delete expenses by swiping right!");
-        openedBefore=true;
-    }
-    
 
     // custom ListItem component with item prop 
     const ListItem = (expense) => {
@@ -58,15 +51,19 @@ const ViewAllScreen = () => {
 
         return(
           <Swipeable renderRightActions={swipeRight} rightThreshold={-200} onSwipeableOpen={handleDeleteExpense}>
-            <Animated.View style={{borderBottomWidth:1,backgroundColor:'grey'}}>
+            <Animated.View style={{backgroundColor:'transparent'}}>
                 <View style={styles.items}>
                     <View style={styles.itemCard}>
-                        <View>
+                        <View style={styles.itemCardTopBar}>
                             <Text style={styles.expenseTitle}>{title}</Text>
-                            <Text style={styles.expenseCategory}>{cat}</Text>
                         </View>
-                        <Text>{date.slice(0,10)}</Text>
-                        <Text style={styles.expenseAmount}>{amount}</Text>
+                        <View style={styles.expenseBody}>
+                          <View style={{paddingLeft: 10}}>
+                            <Text style={styles.expenseCategory}>Category: {cat}</Text>
+                            <Text style={styles.expenseDate}>Date: {date.slice(0,10)}</Text>
+                          </View>
+                          <Text style={styles.expenseAmount}>-${amount}</Text>
+                        </View>
                     </View>     
                 </View>
             </Animated.View>
@@ -90,13 +87,35 @@ export default ViewAllScreen;
 const styles = StyleSheet.create({
     itemCard: {
         flex: 1,
-        flexDirection: 'row',
         justifyContent:'space-between',
         backgroundColor: 'grey',
-        borderRadius: 10,
+        borderRadius: 20,
         marginBottom: 10,
         paddingVertical: 10
     },
-    items : {
+    itemCardTopBar : {
+      borderBottomWidth: 1
+    },
+    expenseTitle: {
+      fontSize: 20,
+      paddingLeft: 10,
+      fontWeight: "bold"
+    },
+    expenseBody: {
+      flexDirection: 'row',
+      justifyContent: "space-between",
+      paddingTop: 10
+    },
+    expenseAmount: {
+      fontSize: 18,
+      color: 'darkred',
+      paddingTop: 10
+    },
+    expenseCategory: {
+      fontSize: 16,
+      marginBottom: 5
+    },
+    expenseDate: {
+      fontSize: 16
     }
 })

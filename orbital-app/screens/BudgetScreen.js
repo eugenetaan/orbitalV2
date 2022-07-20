@@ -104,7 +104,7 @@ const BudgetScreen = () => {
         {/* <Text style={styles.title}>Set Your Budget for the Month!</Text> */}
         <View style={styles.displayBudget}>
             <Text style={{fontSize: 25, marginBottom: 10}}>Current Budget</Text>
-            <Text style={{fontSize: 25, marginBottom: 10}}>For {currentBudgetStart.toISOString().slice(0,10)} to {currentBudgetEnd.toISOString().slice(0,10)}</Text>
+            <Text style={{fontSize: 20, marginBottom: 10}}>For {currentBudgetStart.toISOString().slice(0,10)} to {currentBudgetEnd.toISOString().slice(0,10)}</Text>
             <Text style={{fontSize: 35, color:'green'}}>{isNumeric(currentBudget) ? "$" : ""}{currentBudget}</Text>
         </View>
         <View style={styles.budgetDateContainer}>

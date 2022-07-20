@@ -53,12 +53,11 @@ const ProfileScreen = () => {
         navigation.navigate('ChangeUsername')
     }
 
-    const handleCPPress = () => {
-        navigation.navigate("ChangePassword")
-    }
-
 
     const handleAccountsPress = (keyName) => {
+        if (keyName == "Username") {
+            navigation.navigate("ChangeUsername");
+        }
         navigation.navigate(keyName);
     }
 
@@ -70,18 +69,19 @@ const ProfileScreen = () => {
         <View style={styles.profileTop}>
             <Text style={styles.userName}>{username}</Text>
         </View>
-        <View style={styles.buttonView}>
+        {/* <View style={styles.buttonView}>
             <TouchableOpacity style={styles.profileButton} onPress={handleCUPress}>
                 <Text style={{fontSize: 20, color:"white"}}>Change Username</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.profileButton} onPress={handleCPPress}>
                 <Text style={{fontSize: 20, color:"white"}}>Change Password</Text>
             </TouchableOpacity>
-        </View>
+        </View> */}
         <View>
             <FlatList
                 style={styles.flcontainer}
                 data={[
+                {key: "Username"},
                 {key: 'Bills'},
                 {key: 'Budget'},
                 {key: 'Categories'},
@@ -163,6 +163,6 @@ const styles = StyleSheet.create({
     },
     flcontainer: {
         marginTop: 20,
-        height: "70%"
+        height: "78%"
     }
 })

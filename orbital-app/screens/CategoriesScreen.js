@@ -85,7 +85,7 @@ const CategoriesScreen = () => {
                 style={styles.newCatInput} 
             />
             <TouchableOpacity style={styles.confirmInputCatButton} onPress={() => handleAddPress(categories)}>
-                <Text style={{fontSize:16}}>Add New Category</Text>
+                <Text style={{fontSize:16}}>Add Category</Text>
             </TouchableOpacity>
         </View>
         <View style={styles.inputArea}>

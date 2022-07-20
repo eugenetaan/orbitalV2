@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, RefreshControl } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, RefreshControl,  Dimensions} from 'react-native'
 import { useNavigation } from '@react-navigation/core';
 import { sessionStorage } from '../localstorage'
 import { db } from '../Firebase'
@@ -7,6 +7,7 @@ import Tabs from '../navigator/navbar'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { calcRemaingBudget, calcTotalExpensesDuringBudgetDates} from "../components/budgetCalcFunctions";
 import { logExpensesToDB } from '../components/dbLogDataFunctions';
+import { ProgressChart } from "react-native-chart-kit";
 
 // let DUMMY = [
 //     {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
@@ -23,7 +24,8 @@ const HomeScreen = () => {
     const [username, setUsername] = useState("");
     const [isFetching, setIsFetching] = useState(false);
     const [remainingBudget, setRemainingBudget] = useState(calcRemaingBudget())
-    const [recents, setRecents] = useState(sessionStorage.getItem("expenses")).sort(function(a,b) {
+    const [totalBudget, setTotalBudget] = useState(sessionStorage.getItem('budget'))
+    const [recents, setRecents] = useState(sessionStorage.getItem("expenses")).slice(0,5).sort(function(a,b) {
         return b.date - a.date;
       });
     var currentUserEmail = sessionStorage.getItem("email");
@@ -33,7 +35,8 @@ const HomeScreen = () => {
         const unsubscribe = navigation.addListener('focus', () => {
             setRemainingBudget(calcRemaingBudget());
             setUsername(sessionStorage.getItem('username'))
-            //updateData();
+            setTotalBudget(sessionStorage.getItem('budget'))
+            setRecents(sessionStorage.getItem("expenses").slice(0,5))
         });
         
         return unsubscribe;
@@ -145,8 +148,46 @@ const HomeScreen = () => {
     //     }, [])
 
 
-    
+    const chartConfig = {
+        backgroundGradientFromOpacity: 0,
+        backgroundGradientToOpacity: 0,
+        color: (opacity = 0) => `rgba(15, 39, 14, ${opacity})`,
+        //color: (opacity = 1, _index) => `rgba(0,0,0,${opacity})`,
+    };
 
+
+    const BudgetWithProgressRing = () => {
+
+        if (!isNumeric(remainingBudget)) {
+            return (
+                <View style={styles.chart}>
+                    <Text style={{textAlign: 'center', fontSize:20, fontWeight: 'bold', marginBottom: 20}}>Remaining Budget:</Text>
+                    <Text style={{textAlign: 'center', color: "red", fontSize: 30, fontWeight: 'bold'}}>{remainingBudget}</Text>
+                </View>
+            )
+        }
+
+        return (
+            <View style={styles.chart}>
+                <Text style={{textAlign: 'center', fontSize:20, fontWeight: 'bold', marginBottom: 10}}>Remaining Budget:</Text>
+                <View style={styles.BudgetAnalytics}>
+                    <Text style={{paddingTop: 40, marginLeft: "10%", color: parseFloat(remainingBudget) > 0 ? 'green' : "red", fontSize: 32, fontWeight: 'bold'}}>${remainingBudget}</Text>
+                    <ProgressChart 
+                        data = {
+                            {data:[parseFloat(remainingBudget)/ parseFloat(totalBudget)]}
+                        }
+                        width={220}
+                        height={120}
+                        strokeWidth={10}
+                        radius={40}
+                        chartConfig={chartConfig}
+                    />
+                </View>
+            </View>
+        )
+    }
+
+    
     const handleViewAll = () => {
         navigation.navigate("ViewAll")
     }
@@ -164,8 +205,9 @@ const HomeScreen = () => {
                 </View> */}
             </View>
             <View style={styles.chart}>
-                <Text style={{textAlign: 'center', fontSize:20, fontWeight: 'bold', marginBottom: 20}}>Remaining Budget:</Text>
-                <Text style={{textAlign: 'center', color: parseFloat(remainingBudget) > 0 ? 'green' : "red", fontSize: 30, fontWeight: 'bold'}}>{isNumeric(remainingBudget) ? "$" : ""}{remainingBudget}</Text>
+                {/* <Text style={{textAlign: 'center', fontSize:20, fontWeight: 'bold', marginBottom: 20}}>Remaining Budget:</Text>
+                <Text style={{textAlign: 'center', color: parseFloat(remainingBudget) > 0 ? 'green' : "red", fontSize: 30, fontWeight: 'bold'}}>{isNumeric(remainingBudget) ? "$" : ""}{remainingBudget}</Text> */}
+                <BudgetWithProgressRing></BudgetWithProgressRing>
             </View>
             <View style={styles.recents}>
                 <View style={styles.recentTopBarContainer}>
@@ -175,7 +217,7 @@ const HomeScreen = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={{height: "90%"}}>
-                    <FlatList style={styles.list} data={recents}
+                    <FlatList style={styles.list} data={recents.slice(0, 5)}
                         ListEmptyComponent={<View><Text style={{textAlign: 'center', marginTop: 70}}>No Recent Expenses!</Text></View>}
                         refreshControl={
                             <RefreshControl
@@ -209,7 +251,7 @@ const styles = StyleSheet.create({
         flex:1,
     },
     homeTopBar: {
-        flex: 1,
+        flex: 0.8,
         // justifyContent: "space-between",
         flexDirection: 'row',
     },
@@ -220,7 +262,7 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
     chart :{
-        flex: 1,
+        flex: 1.4,
     },
     recents : {
         flex: 2.5,
@@ -229,21 +271,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection:'row',
         justifyContent: "space-between",
-    },
-    profileImage: {
-        flex: 1,
-        width: 180,
-        height: 180,
-        borderRadius: 250,
-        overflow: "hidden",
-
-    },
-    image: {
-        width: 60,
-        height: 60,
-        borderRadius: 500,
-        marginTop:10,
-        marginRight:10,
     },
     itemCard: {
         flex: 1,
@@ -255,5 +282,11 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     list : {
+    },
+    BudgetAnalytics: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: "center"
+        
     }
 })
