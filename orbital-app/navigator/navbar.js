@@ -5,12 +5,10 @@ import HomeScreen from '../screens/HomeScreen';
 import AddScreen from '../screens/AddScreen';
 import AccountScreen from '../screens/AccountScreen';
 import GoalsScreen from '../screens/GoalsScreen';
+import AnalyticsScreen from '../screens/AnalyticsScreen';
 
 const Tab = createBottomTabNavigator();
 
-const HomeIcon = () => {
-
-}
 
 // options={{tabBarIcon:{goalsIcon}}}
 
@@ -24,7 +22,7 @@ const Tabs = () => {
 
                     if (rn === 'Home') {
                         iconName = focused ? 'home' : 'home-outline';
-                    } else if ( rn === "Goals") {
+                    } else if ( rn === "Analytics") {
                         iconName = focused ? 'stats-chart' : 'stats-chart-outline';
                     } else if ( rn === "Add") {
                         iconName = focused ? 'md-add-circle' : 'md-add-circle-outline';
@@ -38,7 +36,7 @@ const Tabs = () => {
                 },
             })}>
             <Tab.Screen name='Home' options={{headerShown: false}} component={HomeScreen}></Tab.Screen>
-            <Tab.Screen name='Goals' component={GoalsScreen}></Tab.Screen>
+            <Tab.Screen name='Analytics' component={AnalyticsScreen}></Tab.Screen>
             <Tab.Screen name='Add'  component={AddScreen}></Tab.Screen>
             {/* <Tab.Screen name='Leaderboard'  component={LeaderboardScreen}></Tab.Screen> */}
             <Tab.Screen name='Account' component={AccountScreen}></Tab.Screen>

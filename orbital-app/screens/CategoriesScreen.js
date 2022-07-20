@@ -23,9 +23,14 @@ const CategoriesScreen = () => {
     }
 
     const removeCat = (deleteCat, existingCats) => {
-        return existingCats.filter(function(ele){
-            return ele.value.toLowerCase() !== deleteCat.toLowerCase();
-        });
+        if (existingCats.length == 1) {
+            alert("Must have at least one category")
+        }
+        else {
+            return existingCats.filter(function(ele){
+                return ele.value.toLowerCase() !== deleteCat.toLowerCase();
+            });
+        }
     }
 
     const handleAddPress = (existingCats) => {
