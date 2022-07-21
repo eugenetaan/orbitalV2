@@ -189,7 +189,7 @@ const HomeScreen = () => {
 
     
     const handleViewAll = () => {
-        navigation.navigate("ViewAll")
+        navigation.navigate("View All")
     }
 
     return (
@@ -211,9 +211,9 @@ const HomeScreen = () => {
             </View>
             <View style={styles.recents}>
                 <View style={styles.recentTopBarContainer}>
-                    <Text style={{paddingLeft:20, fontSize:25, fontWeight:"bold"}}>Recents</Text>
+                    <Text style={{paddingLeft:10, fontSize:25, fontWeight:"bold"}}>Recents</Text>
                     <TouchableOpacity onPress={handleViewAll}>
-                        <Text style={{paddingRight:20,fontSize:20, paddingTop:2}}>View All</Text>
+                        <Text style={{paddingRight:10,fontSize:20, paddingTop:2}}>View All</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={{height: "90%"}}>
@@ -227,11 +227,11 @@ const HomeScreen = () => {
                         renderItem={({item}) => (
                             <View style={styles.items}>
                                 <View style={styles.itemCard}>
-                                    <View>
+                                    <View style={{paddingLeft: 10}}>
                                         <Text style={styles.expenseTitle}>{item.title}</Text>
                                         <Text style={styles.expenseCategory}>{item.cat}</Text>
                                     </View>
-                                        <Text style={styles.expenseAmount}>{item.amount}</Text>
+                                        <Text style={styles.expenseAmount}>-${item.amount}</Text>
                                 </View>
                                 {/* <View style={styles.expenseDatie}></View> */}
                             </View>
@@ -249,6 +249,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     homeContainer: {
         flex:1,
+        backgroundColor: "#F1F2F6"
     },
     homeTopBar: {
         flex: 0.8,
@@ -276,10 +277,11 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent:'space-between',
-        backgroundColor: 'grey',
+        //backgroundColor: 'grey',
         borderRadius: 10,
         marginBottom: 10,
-        paddingVertical: 10
+        paddingVertical: 10,
+        borderBottomWidth: 0.5,
     },
     list : {
     },
@@ -287,6 +289,13 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: "center"
-        
+    },
+    expenseAmount: {
+        color: '#9d0208',
+        paddingRight: 10,
+    },
+    expenseTitle: {
+        fontSize: 16,
+        fontWeight: "bold"
     }
 })

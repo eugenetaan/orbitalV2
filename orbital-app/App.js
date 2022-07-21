@@ -13,7 +13,6 @@ import SettingsScreen from './screens/SettingsScreen';
 import BillsScreen from './screens/BillsScreen';
 import BudgetScreen from './screens/BudgetScreen';
 import CategoriesScreen from './screens/CategoriesScreen';
-import ChangePasswordScreen from './screens/ChangePasswordScreen';
 import ChangeUsernameScreen from './screens/ChangeUsernameScreen';
 import AddBillScreen from './screens/AddBillScreen';
 
@@ -25,15 +24,14 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen name="Home" component={navbar} options={{headerLeft: (props) => null , gestureEnabled: false, headerShown: false }} />
-        <Stack.Screen name="Register" component={RegisterScreen} />
-        <Stack.Screen name="ViewAll" component={ViewAllScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
+        <Stack.Screen name="View All" component={ViewAllScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
         <Stack.Screen name="Bills" component={BillsScreen} />
         <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="Budget" component={BudgetScreen} />
-        <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
         <Stack.Screen name="ChangeUsername" component={ChangeUsernameScreen} />
-        <Stack.Screen name="AddBills" component={AddBillScreen} />
+        <Stack.Screen name="Add Bills" component={AddBillScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

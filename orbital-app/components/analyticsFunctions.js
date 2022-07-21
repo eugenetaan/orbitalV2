@@ -147,8 +147,19 @@ const getSpendingForLatestSixMonths = () => {
     
 }
 
+// check if any expense with category to prevent deletion
 
+const checkIfCatHasExpense = (cat) => {
+    var filteredExpenses = sessionStorage.getItem("expenses").filter((exp => {return exp.cat == cat}))
 
-export {addColoursToCats, getLatestSixMonths, getSpendingForLatestSixMonths};
+    if (filteredExpenses.length == 0) {
+        return true;
+    } else {
+        return false;
+    }
+    
+}
+
+export {addColoursToCats, getLatestSixMonths, getSpendingForLatestSixMonths, checkIfCatHasExpense};
 
 

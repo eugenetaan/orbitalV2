@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     itemCard: {
         flex: 1,
         justifyContent:'space-between',
-        backgroundColor: 'grey',
+        backgroundColor: '#AEB8FE',
         borderRadius: 20,
         marginBottom: 10,
         paddingVertical: 10
@@ -108,8 +108,9 @@ const styles = StyleSheet.create({
     },
     expenseAmount: {
       fontSize: 18,
-      color: 'darkred',
-      paddingTop: 10
+      color: '#9d0208',
+      paddingTop: 10,
+      paddingRight: 5,
     },
     expenseCategory: {
       fontSize: 16,

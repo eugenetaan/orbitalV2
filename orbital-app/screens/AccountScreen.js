@@ -3,12 +3,25 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react
 import { useNavigation } from '@react-navigation/core';
 import { sessionStorage } from '../localstorage'
 import { auth, db } from "../Firebase";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
     const [username, setUsername] = useState(sessionStorage.getItem('username'))
 
     var budgetAmount = sessionStorage.getItem('currentBudget')
+
+    const selectOptionIcon = (key) => {
+        if (key == "Username") {
+            return "person-outline";
+        } else if (key == "Budget") {
+            return "calculator";
+        } else if (key == "Bills") {
+            return "cash";
+        } else {
+            return "clipboard-outline";
+        }
+    } 
 
     // include code to update everything eg expenses/budget/categories to db
     const handleSignOut = () => {
@@ -65,7 +78,7 @@ const ProfileScreen = () => {
     // changed you have saved this month to calculate budget - expenses
     // style={{backgroundColor: '#E5E5E5'}}
     return (
-    <View>
+    <View style={{backgroundColor: "#F1F2F6"}}>
         <View style={styles.profileTop}>
             <Text style={styles.userName}>{username}</Text>
         </View>
@@ -87,8 +100,14 @@ const ProfileScreen = () => {
                 {key: 'Categories'},
                 ]}
                 renderItem={({item}) => 
-                <TouchableOpacity>
-                    <Text style={styles.settingsOptions} onPress={() => handleAccountsPress(item.key)}>{item.key}</Text>
+                <TouchableOpacity onPress={() => handleAccountsPress(item.key)}>
+                    <View style={styles.settingsOptions}>
+                        <View style={styles.settingsOptionIcons}>
+                            <Ionicons style={{paddingHorizontal: 10}} name={selectOptionIcon(item.key)} size="30"/>
+                            <Text style={styles.settingsText} >{item.key}</Text>
+                        </View>
+                        <Ionicons style={{paddingRight: 10}} name="arrow-forward" size="30" />
+                    </View>
                 </TouchableOpacity>}
             />
             <View style={styles.container}>
@@ -141,17 +160,19 @@ const styles = StyleSheet.create({
         paddingTop: 12
     },
     settingsOptions: {
+        flexDirection: 'row',
         height: 60,
         width: "100%",
-        backgroundColor: 'grey',
+        marginBottom: 2,
+        backgroundColor: '#758BFD',
         textAlign: 'center',
-        fontSize: 30,
         paddingTop: 15,
         borderColor: "#fcfdfb",
         borderWidth: 0.5,
+        justifyContent: "space-between"
     },
     signOutButton: {
-        backgroundColor: 'darkred',
+        backgroundColor: '#9a031e',
         borderRadius: 35,
         height:50,
         width: 150,
@@ -163,6 +184,12 @@ const styles = StyleSheet.create({
     },
     flcontainer: {
         marginTop: 20,
-        height: "78%"
+        height: "78%",
+    },
+    settingsText: {
+        fontSize: 30,
+    },
+    settingsOptionIcons: {
+        flexDirection: "row"
     }
 })
