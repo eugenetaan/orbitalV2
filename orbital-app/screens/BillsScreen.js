@@ -22,7 +22,7 @@ const BillsScreen = () => {
 
 
     const handleAddBillNavigation = () => {
-        navigation.navigate("AddBills")
+        navigation.navigate("Add Bills")
     }
 
     const handleDeleteBillNavigation = () => {
@@ -95,7 +95,7 @@ export default BillsScreen;
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: "#5F7DDE",
+        backgroundColor: "#AEB8FE",
         width: 150,
         alignItems: 'center',
         borderRadius: 20,
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
         marginBottom: 10, 
     },
     billCard: {
-        backgroundColor: "#5F7DDE",
+        backgroundColor: "#AEB8FE",
         borderRadius: 15,
         width: '90%',
         alignSelf: 'center',

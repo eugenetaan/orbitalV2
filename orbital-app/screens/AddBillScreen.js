@@ -27,6 +27,8 @@ const AddBillScreen = () => {
             alert("Bill Title Cannot Be Empty");
         } else if (!isNumeric(enteredAmount)) {
             alert('Amount is not valid')
+        } else if (parseFloat(enteredAmount) <= 0) {
+            alert('Amount must be greater than 0')
         } else if (enteredDate < new Date()) {
             alert("Next due date must be later than present")
         } else {
@@ -76,12 +78,12 @@ const AddBillScreen = () => {
     return (
         <KeyboardAvoidingView
             style = {styles.container}
-            behaviour="padding"
+            //behaviour="padding"
         >
             <View style={styles.inputContainer}>
-                <Text>Bill Name</Text>
+                <Text style={{marginTop: "40%"}}>Bill Name</Text>
                 <TextInput 
-                    placeholder="Email"
+                    placeholder="Bill Name"
                     value = {enteredTitle}
                     onChangeText = {text => setEnteredTitle(text)}
                     style={styles.input}                
@@ -95,7 +97,10 @@ const AddBillScreen = () => {
                 />
                 <Dropdown label='Period' data={periodsAvailable} onChangeText={value => setPeriod(value)} value={period}></Dropdown>
                 <View style={styles.dateDisplay}>
-                    <Text style={{fontSize:25, marginLeft: 20}}>{enteredDate.toISOString().slice(0,10)}</Text>
+                    <View style={styles.dateContainer}>
+                        <Text style={{fontSize:20}}>Next Due On:</Text>
+                        <Text style={{fontSize:20}}>{enteredDate.toISOString().slice(0,10)}</Text>
+                    </View>
                     <Button style={{marginRight: 30}} title="Select Date" onPress={showDatePicker} />
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
@@ -126,7 +131,7 @@ export default AddBillScreen;
 const styles= StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignItems: 'center',
     },
     inputContainer: {
@@ -146,7 +151,7 @@ const styles= StyleSheet.create({
         marginTop: 40,
     },
     button: {
-        backgroundColor: "#0782F9",
+        backgroundColor: "#AEB8FE",
         width: '100%',
         padding: 15,
         borderRadius: 10,
@@ -168,4 +173,10 @@ const styles= StyleSheet.create({
         fontWeight: "700",
         fontSize: 16,
     },
+    dateContainer: {
+        flexDirection: 'row',
+        justifyContent: "space-between",
+        marginBottom: 15
+    }
+
 })

@@ -129,7 +129,7 @@ const AddScreen = () => {
     // timeZoneOffsetInMinutes={480} to experiment with datepickdr and utc one day off probs
 
     return (
-    <View style={{backgroundColor:"E5E5E5"}}>
+    <View sstyle={{backgroundColor: "#F1F2F6"}}>
         <View style={styles.viewingArea}>
             <View>
                 <TextInput

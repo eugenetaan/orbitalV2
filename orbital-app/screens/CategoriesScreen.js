@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, FlatList } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { sessionStorage } from '../localstorage'
 import { logCategoriesToDB } from '../components/dbLogDataFunctions'
+import { checkIfCatHasExpense } from '../components/analyticsFunctions'
 
 const CategoriesScreen = () => {
     [categories, setCategories] = useState(sessionStorage.getItem('Cats'));
@@ -25,8 +26,7 @@ const CategoriesScreen = () => {
     const removeCat = (deleteCat, existingCats) => {
         if (existingCats.length == 1) {
             alert("Must have at least one category")
-        }
-        else {
+        } else {
             return existingCats.filter(function(ele){
                 return ele.value.toLowerCase() !== deleteCat.toLowerCase();
             });
@@ -54,6 +54,8 @@ const CategoriesScreen = () => {
             alert("Please Enter A Category");
         } else if (!checkIfCatExists(deleteCat, existingCats)) {
             alert("Category Not Found");
+        } else if (!checkIfCatHasExpense(deleteCat)) {
+            alert("Category is used in an existing expense")
         } else {
             var updatedCats = removeCat(deleteCat, existingCats);
             setCategories(updatedCats)
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
         marginTop:5,        
     },
     confirmInputCatButton: {
-        backgroundColor: "#5F7DDE",
+        backgroundColor: "#AEB8FE",
         width: 150,
         alignItems: 'center',
         borderRadius: 20,
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
         height: 50,
     },
     confirmDeleteCatButton: {
-        backgroundColor: "darkred",
+        backgroundColor: "#9a031e",
         width: 150,
         alignItems: 'center',
         borderRadius: 20,

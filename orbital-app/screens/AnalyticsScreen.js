@@ -49,7 +49,7 @@ const AnalyticsScreen = () => {
 
 
     return (
-    <View>
+    <View style={{backgroundColor: "#F1F2F6"}}>
         <View>
             <Text style={styles.chartTitle}>Recent Spending</Text>
             <LineChart
@@ -62,7 +62,7 @@ const AnalyticsScreen = () => {
                 ]
                 }}
                 width={Dimensions.get("window").width} // from react-native
-                height={220}
+                height={230}
                 yAxisLabel="$"
                 yAxisInterval={1} // optional, defaults to 1
                 chartConfig={chartConfigLine}

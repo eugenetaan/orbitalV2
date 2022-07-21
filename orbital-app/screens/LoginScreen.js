@@ -7,7 +7,9 @@ import {
   TextInput,
   KeyboardAvoidingView,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
+import { Input, Button } from "@rneui/base";
 import { auth } from "../Firebase";
 import { sessionStorage } from "../localstorage";
 import { db } from '../Firebase'
@@ -28,15 +30,19 @@ const LoginScreen = () => {
     // }   
 
     const handleLogin = () => {
-        setEmail("");
-        setPassword("");
-        auth
-            .signInWithEmailAndPassword(email, password)  
-            .then(sessionStorage.setItem("email", email))
-            .then(setExpenses())
-            .then(initBudget())
-            .then(() => navigation.navigate("Home"))
-            .catch(error=> alert(error.message))
+        if (email.length == 0 || password.length == 0) {
+            alert("Please fill in all required fields.")
+        } else {
+            setEmail("");
+            setPassword("");
+            auth
+                .signInWithEmailAndPassword(email, password)  
+                .then(sessionStorage.setItem("email", email))
+                .then(setExpenses())
+                .then(initBudget())
+                .then(() => navigation.navigate("Home"))
+                .catch(error=> alert("Invalid Email Or Password"))
+        }
     }
 
     // get expenses
@@ -48,7 +54,7 @@ const LoginScreen = () => {
                 .then((doc) => {
                     //console.log(email)
                     expenses = doc.data().expenses;
-                    console.log(expenses)
+                    //console.log(expenses)
                     sessionStorage.setItem('expenses', expenses);
                 })
     }
@@ -63,7 +69,7 @@ const LoginScreen = () => {
                 budget = doc.data().budget;
                 //console.log(budget)
                 startDate = new Date(doc.data().budgetStartDate);
-                console.log(doc.data())
+                //console.log(doc.data())
                 endDate = new Date(doc.data().budgetEndDate);
                 sessionStorage.setItem('budget', budget);
                 sessionStorage.setItem('budgetStartDate', startDate);
@@ -82,42 +88,49 @@ const LoginScreen = () => {
     }, [])
 
     return (
-        <KeyboardAvoidingView
-            style = {styles.container}
-            behaviour="padding"
-        >
-            <Text style={styles.logoText}>MooLahz</Text>
-            <View style={styles.inputContainer}>
-                <TextInput 
-                    placeholder="Email"
-                    value = {email}
-                    onChangeText = {text => setEmail(text)}
-                    style={styles.input}                
-                />
-                <TextInput 
-                    placeholder="Password"
-                    value = {password}
-                    onChangeText = {text => setPassword(text)}
-                    style={styles.input}     
-                    secureTextEntry           
-                />
-            </View>
+        <ImageBackground 
+            style={ styles.imgBackground } 
+            resizeMode='cover' 
+            source={require('orbital-app/assets/Asset1.png')}>
+            <KeyboardAvoidingView
+                style = {styles.container}
+                behaviour="padding"
+            >
+                <Text style={styles.logoText}>MooLahz</Text>
+                <View style={styles.inputContainer}>
+                    <Input 
+                        placeholder="Email"
+                        value = {email}
+                        onChangeText = {text => setEmail(text)}
+                        style={styles.input}
+                        //errorMessage="Please enter a valid email address."                
+                    />
+                    <Input 
+                        placeholder="Password"
+                        value = {password}
+                        onChangeText = {text => setPassword(text)}
+                        style={styles.input}
+                        //errorMessage="Please enter a valid password."     
+                        secureTextEntry           
+                    />
+                </View>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    onPress={handleLogin}
-                    style={styles.button}
-                >
-                    <Text style={styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("Register")}
-                    style={[styles.button, styles.buttonOutline]}
-                >
-                    <Text style={styles.buttonOutlineText}>Register</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        onPress={handleLogin}
+                        style={styles.button}
+                    >
+                        <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate("Register")}
+                        style={[styles.button, styles.buttonOutline]}
+                    >
+                        <Text style={styles.buttonOutlineText}>Register</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </ImageBackground>
     )
 }
 
@@ -128,6 +141,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 50,
         paddingBottom: 130,
+        color: "#F1F2F6"
     },
     container: {
         flex: 1,
@@ -138,11 +152,12 @@ const styles = StyleSheet.create({
         width: '80%'
     },
     input: {
-        backgroundColor: "white",
+        backgroundColor: "#F1F2F6",
         paddingHorizontal: 15,
         paddingVertical: 10,
-        borderRadius: 10,
-        marginTop:5,
+        borderRadius: 25,
+        marginTop:0,
+        
     },
     buttonContainer: {
         width: '60%',
@@ -151,20 +166,20 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     button: {
-        backgroundColor: "#0782F9",
+        backgroundColor: "#F1F2F6",
         width: '100%',
         padding: 15,
-        borderRadius: 10,
+        borderRadius: 25,
         alignItems: "center",
     },
     buttonOutline: {
-        backgroundColor: 'white',
+        backgroundColor: '#F1F2F6',
         marginTop: 5,
         borderColor:  "#0782F9",
         borderWidth: 2,
     },
     buttonText: {
-        color: "white",
+        color:  "#0782F9",
         fontWeight: '700',
         fontSize: 16
     },
@@ -172,5 +187,10 @@ const styles = StyleSheet.create({
         color:  "#0782F9",
         fontWeight: "700",
         fontSize: 16,
+    },
+    imgBackground: {
+        width: '100%',
+        height: '100%',
+        flex: 1 
     },
 })

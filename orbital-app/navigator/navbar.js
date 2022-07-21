@@ -4,7 +4,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../screens/HomeScreen';
 import AddScreen from '../screens/AddScreen';
 import AccountScreen from '../screens/AccountScreen';
-import GoalsScreen from '../screens/GoalsScreen';
 import AnalyticsScreen from '../screens/AnalyticsScreen';
 
 const Tab = createBottomTabNavigator();
@@ -26,8 +25,6 @@ const Tabs = () => {
                         iconName = focused ? 'stats-chart' : 'stats-chart-outline';
                     } else if ( rn === "Add") {
                         iconName = focused ? 'md-add-circle' : 'md-add-circle-outline';
-                    } else if ( rn === "Leaderboard") {
-                        iconName = focused ? 'bar-chart' : 'bar-chart-outline';
                     } else if ( rn === "Account") {
                         iconName = focused ? 'person' : 'person-outline';
                     }
@@ -38,7 +35,6 @@ const Tabs = () => {
             <Tab.Screen name='Home' options={{headerShown: false}} component={HomeScreen}></Tab.Screen>
             <Tab.Screen name='Analytics' component={AnalyticsScreen}></Tab.Screen>
             <Tab.Screen name='Add'  component={AddScreen}></Tab.Screen>
-            {/* <Tab.Screen name='Leaderboard'  component={LeaderboardScreen}></Tab.Screen> */}
             <Tab.Screen name='Account' component={AccountScreen}></Tab.Screen>
         </Tab.Navigator>    
     );

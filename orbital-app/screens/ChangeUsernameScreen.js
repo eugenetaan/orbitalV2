@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         marginTop:5,        
     },
     confirmInputCatButton: {
-        backgroundColor: "#5F7DDE",
+        backgroundColor: "#AEB8FE",
         width: 150,
         alignItems: 'center',
         borderRadius: 20,
