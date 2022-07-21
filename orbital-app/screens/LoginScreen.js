@@ -7,8 +7,9 @@ import {
   TextInput,
   KeyboardAvoidingView,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
+import { Input, Button } from "@rneui/base";
 import { auth } from "../Firebase";
 import { sessionStorage } from "../localstorage";
 import { db } from '../Firebase'
@@ -40,7 +41,7 @@ const LoginScreen = () => {
                 .then(setExpenses())
                 .then(initBudget())
                 .then(() => navigation.navigate("Home"))
-                .catch(error=> alert(error.message))
+                .catch(error=> alert("Invalid Email Or Password"))
         }
     }
 
@@ -97,19 +98,19 @@ const LoginScreen = () => {
             >
                 <Text style={styles.logoText}>MooLahz</Text>
                 <View style={styles.inputContainer}>
-                    <TextInput 
+                    <Input 
                         placeholder="Email"
                         value = {email}
                         onChangeText = {text => setEmail(text)}
                         style={styles.input}
-                        errorMessage="Please enter a valid email address."                
+                        //errorMessage="Please enter a valid email address."                
                     />
-                    <TextInput 
+                    <Input 
                         placeholder="Password"
                         value = {password}
                         onChangeText = {text => setPassword(text)}
                         style={styles.input}
-                        errorMessage="Please enter a valid password."     
+                        //errorMessage="Please enter a valid password."     
                         secureTextEntry           
                     />
                 </View>
@@ -155,7 +156,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 10,
         borderRadius: 25,
-        marginTop:5,
+        marginTop:0,
+        
     },
     buttonContainer: {
         width: '60%',

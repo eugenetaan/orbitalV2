@@ -74,6 +74,8 @@ const ProfileScreen = () => {
         navigation.navigate(keyName);
     }
 
+    const ioniconsFontSize = 30;
+
 
     // changed you have saved this month to calculate budget - expenses
     // style={{backgroundColor: '#E5E5E5'}}
@@ -103,10 +105,10 @@ const ProfileScreen = () => {
                 <TouchableOpacity onPress={() => handleAccountsPress(item.key)}>
                     <View style={styles.settingsOptions}>
                         <View style={styles.settingsOptionIcons}>
-                            <Ionicons style={{paddingHorizontal: 10}} name={selectOptionIcon(item.key)} size="30"/>
+                            <Ionicons style={{paddingHorizontal: 10}} name={selectOptionIcon(item.key)} size={ioniconsFontSize}/>
                             <Text style={styles.settingsText} >{item.key}</Text>
                         </View>
-                        <Ionicons style={{paddingRight: 10}} name="arrow-forward" size="30" />
+                        <Ionicons style={{paddingRight: 10}} name="arrow-forward" size={ioniconsFontSize} />
                     </View>
                 </TouchableOpacity>}
             />
@@ -187,7 +189,9 @@ const styles = StyleSheet.create({
         height: "78%",
     },
     settingsText: {
-        fontSize: 30,
+        fontSize: 20,
+        alignSelf: 'center',
+        paddingBottom: 10
     },
     settingsOptionIcons: {
         flexDirection: "row"
