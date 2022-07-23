@@ -16,7 +16,7 @@ const CategoriesScreen = () => {
         var i;
         for (i = 0; i < existingCats.length; i++) {
             //console.log(existingCats[i].value)
-            if (existingCats[i].value.toLowerCase() == catToAdd.toLowerCase() ) {
+            if (existingCats[i].value.toLowerCase() == catToAdd.toLowerCase().trim() ) {
                 return true;
             }
         }
@@ -38,8 +38,10 @@ const CategoriesScreen = () => {
             alert("Category cannot be blank")
         } else if (checkIfCatExists(newCat, existingCats)) {
             alert("Category Already Exists")
+        } else if (newCat.trim().length >= 14) {
+            alert("Category is too long!")
         } else {
-            var updatedCats = [{ 'value' : newCat}, ...existingCats];
+            var updatedCats = [{ 'value' : newCat.trim()}, ...existingCats];
             setCategories(updatedCats)
             sessionStorage.setItem('Cats', updatedCats);
             setNewCat("");
@@ -57,7 +59,7 @@ const CategoriesScreen = () => {
         } else if (!checkIfCatHasExpense(deleteCat)) {
             alert("Category is used in an existing expense")
         } else {
-            var updatedCats = removeCat(deleteCat, existingCats);
+            var updatedCats = removeCat(deleteCat.trim(), existingCats);
             setCategories(updatedCats)
             sessionStorage.setItem('Cats', updatedCats);
             setDeleteCat('');
@@ -67,16 +69,18 @@ const CategoriesScreen = () => {
     }
 
     return (
-    <View>
+    <View style={{flex:2}}>
         <View styles={styles.viewingArea}>
             <Text style={{fontSize:20, textAlign:"center"}}>Current Categories</Text>
-            <FlatList style={styles.categoriesList} data={categories} 
-                renderItem={({item}) => (
-                    <View style={styles.categoryItem}>
-                        <Text  style={{fontSize:20}}>{item.value}</Text>
-                    </View>
-                )}
-            ></FlatList>
+            <View style={{height: 250}}>
+                <FlatList style={styles.categoriesList} data={categories} 
+                    renderItem={({item}) => (
+                        <View style={styles.categoryItem}>
+                            <Text  style={{fontSize:20}}>{item.value}</Text>
+                        </View>
+                    )}
+                ></FlatList>
+            </View>
         </View>
         <View style={styles.inputArea}>
             <Text style={{fontSize:20, textAlign:"center"}}>Add Your Custom Category!</Text>
@@ -88,10 +92,8 @@ const CategoriesScreen = () => {
             />
             <TouchableOpacity style={styles.confirmInputCatButton} onPress={() => handleAddPress(categories)}>
                 <Text style={{fontSize:16}}>Add Category</Text>
-            </TouchableOpacity>
-        </View>
-        <View style={styles.inputArea}>
-            <Text style={{fontSize:20, textAlign:"center"}}>Remove Category</Text>
+            </TouchableOpacity>    
+            <Text style={{fontSize:20, textAlign:"center", marginTop: 20}}>Remove Category</Text>
             <TextInput 
                 placeholder='Enter Category To Delete'
                 value = {deleteCat}
@@ -136,10 +138,11 @@ const styles = StyleSheet.create({
         marginTop: 20 
     },
     inputArea: {
-        marginTop: 50
+        marginTop: 50,
+        height: "50%"
     },
     viewingArea: {
-        height: 50,
+        height: "50%"
     },
     confirmDeleteCatButton: {
         backgroundColor: "#9a031e",

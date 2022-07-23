@@ -25,8 +25,10 @@ const BillsScreen = () => {
         navigation.navigate("Add Bills")
     }
 
-    const handleDeleteBillNavigation = () => {
-    
+    const checkBillDue = (nextDue) => {
+        var todayDate = new Date().toISOString().slice(0,10);
+        var billDue = nextDue.slice(0,10);
+        return billDue<=todayDate ? "red" : "black"
     }
 
     const BillItem = (bill) => {
@@ -62,7 +64,7 @@ const BillsScreen = () => {
                 <Animated.View >
                     <View style={styles.billCard}>
                         <View style={styles.billName}>
-                            <Text style={{fontSize: 25, fontWeight: 'bold'}}>{billName}</Text>
+                            <Text style={{fontSize: 25, fontWeight: 'bold', color:checkBillDue(nextDue) }}>{billName}</Text>
                         </View>
                         <View style={styles.billContent}>
                             <Text style={styles.billContentText}>Amount: ${billAmount}</Text>
@@ -80,7 +82,7 @@ const BillsScreen = () => {
         <TouchableOpacity style={styles.button} onPress={handleAddBillNavigation}>
             <Text style={{fontSize: 20}}>Add New Bill</Text>
         </TouchableOpacity>
-        <View style={{marginTop: 10}}>
+        <View style={{marginTop: 10, height: "80%"}}>
                 <FlatList data={bills}
                   ListEmptyComponent={<View><Text style={{textAlign: 'center', marginTop: 70}}>No Bills Added!</Text></View>}
                   renderItem={({item}) => <BillItem bill={item}/>}            
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
         marginBottom: 10, 
     },
     billCard: {
-        backgroundColor: "#AEB8FE",
+        //backgroundColor: "#AEB8FE",
         borderRadius: 15,
         width: '90%',
         alignSelf: 'center',

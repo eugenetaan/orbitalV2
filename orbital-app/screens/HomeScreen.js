@@ -230,6 +230,7 @@ const HomeScreen = () => {
                                     <View style={{paddingLeft: 10}}>
                                         <Text style={styles.expenseTitle}>{item.title}</Text>
                                         <Text style={styles.expenseCategory}>{item.cat}</Text>
+                                        <Text style={styles.expenseDate}>{item.date.slice(0,10)}</Text>
                                     </View>
                                         <Text style={styles.expenseAmount}>-${item.amount}</Text>
                                 </View>
@@ -297,5 +298,5 @@ const styles = StyleSheet.create({
     expenseTitle: {
         fontSize: 16,
         fontWeight: "bold"
-    }
+    },
 })
