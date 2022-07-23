@@ -27,8 +27,8 @@ const AddBillScreen = () => {
             alert("Bill Title Cannot Be Empty");
         } else if (!isNumeric(enteredAmount)) {
             alert('Amount is not valid')
-        } else if (parseFloat(enteredAmount) <= 0) {
-            alert('Amount must be greater than 0')
+        } else if (parseFloat(enteredAmount) <= 0.01) {
+            alert('Amount is not valid')
         } else if (enteredDate < new Date()) {
             alert("Next due date must be later than present")
         } else {
