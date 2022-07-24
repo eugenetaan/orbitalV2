@@ -16,11 +16,22 @@ const AddBillScreen = () => {
     const [periodsAvailable, setPeriodsAvailable] = useState(periodsList);
     const [period, setPeriod] = useState('Daily');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [selectedCat, setSelectedCat] = useState("Transport");
+    const [catsAvailable, setCatsAvailable] = useState(sessionStorage.getItem('Cats'))
     const navigation= useNavigation();
 
     function isNumeric(num){
         return !isNaN(num)
     }
+
+    // allows state to update upon screen focus ( very useful!!)
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            setCatsAvailable(sessionStorage.getItem('Cats'));
+        });
+    
+        return unsubscribe;
+      }, [navigation]);
 
     const handleAddBill = () => {
         if (enteredTitle.length == 0) {
@@ -36,6 +47,7 @@ const AddBillScreen = () => {
                 billName : enteredTitle,
                 billAmount : parseFloat(enteredAmount).toFixed(2),
                 billPeriod : period,
+                billCategory: selectedCat,
                 nextDue : enteredDate.toISOString(),
                 key : Math.random()
             }
@@ -96,6 +108,7 @@ const AddBillScreen = () => {
                     style={styles.input}       
                 />
                 <Dropdown label='Period' data={periodsAvailable} onChangeText={value => setPeriod(value)} value={period}></Dropdown>
+                <Dropdown label='Categories' data={catsAvailable} onChangeText={value => setSelectedCat(value)} value={selectedCat}></Dropdown>
                 <View style={styles.dateDisplay}>
                     <View style={styles.dateContainer}>
                         <Text style={{fontSize:20}}>Next Due On:</Text>

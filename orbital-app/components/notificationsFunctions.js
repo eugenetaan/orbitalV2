@@ -73,6 +73,38 @@ const updateDueDateOfBills = () => {
 
 }
 
+const updateDueDateOfBill = (bill) => {
+    var date = new Date().toISOString().slice(0,10);
+    var bills = sessionStorage.getItem('bills')
+
+   
+    let newDue;
+    var currentDate = new Date(bill.nextDue)
+    if (bill.nextDue.slice(0,10) <= date) {
+        if (bill.billPeriod == "Weekly") {
+            
+            newDue = addDaysToDate(currentDate, 7);
+
+        } else if (bill.billPeriod == "Monthly") {
+                
+            newDue = addDaysToDate(currentDate, 30);  
+                
+        } else if (bill.billPeriod == "Daily") {
+            newDue = addDaysToDate(currentDate, 1);
+
+        } else {
+            var currentYear = parseInt(bill.nextDue.slice(0,4));
+            var newYear = (currentYear + 1).toString();
+            newDue = (newYear + bill.nextDue.slice(4, bill.nextDue.length))
+        }
+    }
+
+    bill.nextDue = newDue;
+    newBills = bills.map(u => u.key !== bill.key ? u : bill);
+    sessionStorage.setItem('bills', newBills)
+    logBillsToDB();
+}
+
 const checkIfBillsDue = () => {
     const date = new Date().toISOString().slice(0,10)
     var bills = sessionStorage.getItem('bills')
@@ -86,4 +118,4 @@ const checkIfBillsDue = () => {
 }
 
 
-export {handleBillDueNotification, checkIfBillsDue, updateDueDateOfBills};
+export {handleBillDueNotification, checkIfBillsDue, updateDueDateOfBills, updateDueDateOfBill};

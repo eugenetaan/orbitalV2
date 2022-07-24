@@ -8,7 +8,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { calcRemaingBudget, calcTotalExpensesDuringBudgetDates} from "../components/budgetCalcFunctions";
 import { logExpensesToDB } from '../components/dbLogDataFunctions';
 import { ProgressChart } from "react-native-chart-kit";
-import { checkIfBillsDue, handleBillDueNotification, updateDueDateOfBills } from '../components/notificationsFunctions';
+import { checkIfBillsDue, handleBillDueNotification } from '../components/notificationsFunctions';
 
 // let DUMMY = [
 //     {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
@@ -17,6 +17,8 @@ import { checkIfBillsDue, handleBillDueNotification, updateDueDateOfBills } from
 
 // sessionStorage.setItem("currentBudget", "No Budget Set")
 // sessionStorage.setItem("dummyExpenses", DUMMY);
+
+var billNotifSent = false;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -121,9 +123,11 @@ const HomeScreen = () => {
 
     // push notif 
     useEffect(() => {
-        if (checkIfBillsDue()) {
-            handleBillDueNotification();
-            updateDueDateOfBills();
+        if (!billNotifSent) {
+            if (checkIfBillsDue()) {
+                handleBillDueNotification();
+            }
+            billNotifSent = true;
         }
     })
 
