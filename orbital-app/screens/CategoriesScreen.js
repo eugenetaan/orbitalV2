@@ -24,13 +24,9 @@ const CategoriesScreen = () => {
     }
 
     const removeCat = (deleteCat, existingCats) => {
-        if (existingCats.length == 1) {
-            alert("Must have at least one category")
-        } else {
-            return existingCats.filter(function(ele){
-                return ele.value.toLowerCase() !== deleteCat.toLowerCase();
-            });
-        }
+        return existingCats.filter(function(ele){
+            return ele.value.toLowerCase() !== deleteCat.toLowerCase();
+        });
     }
 
     const handleAddPress = (existingCats) => {
@@ -58,6 +54,8 @@ const CategoriesScreen = () => {
             alert("Category Not Found");
         } else if (!checkIfCatHasExpense(deleteCat)) {
             alert("Category is used in an existing expense")
+        } else if (existingCats.length == 1) {
+            alert("Must have at least one category")
         } else {
             var updatedCats = removeCat(deleteCat.trim(), existingCats);
             setCategories(updatedCats)

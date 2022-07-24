@@ -8,6 +8,7 @@ import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { calcRemaingBudget, calcTotalExpensesDuringBudgetDates} from "../components/budgetCalcFunctions";
 import { logExpensesToDB } from '../components/dbLogDataFunctions';
 import { ProgressChart } from "react-native-chart-kit";
+import { checkIfBillsDue, handleBillDueNotification } from '../components/notificationsFunctions';
 
 // let DUMMY = [
 //     {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
@@ -16,6 +17,8 @@ import { ProgressChart } from "react-native-chart-kit";
 
 // sessionStorage.setItem("currentBudget", "No Budget Set")
 // sessionStorage.setItem("dummyExpenses", DUMMY);
+
+var billNotifSent = false;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -105,18 +108,28 @@ const HomeScreen = () => {
     }, [])
 
 
-    // get bills init 
-    useEffect(() => {
-        let bills;
-        const user = db.collection('profiles')
-            .doc(currentUserEmail)
-            .get()
-            .then((doc) => {
-                bills = doc.data().bills;
-                sessionStorage.setItem('bills', bills);
-            })
-    }, [])
+    // // get bills init 
+    // useEffect(() => {
+    //     let bills;
+    //     const user = db.collection('profiles')
+    //         .doc(currentUserEmail)
+    //         .get()
+    //         .then((doc) => {
+    //             bills = doc.data().bills;
+    //             sessionStorage.setItem('bills', bills);
+    //         })
+    // }, [])
 
+
+    // push notif 
+    useEffect(() => {
+        if (!billNotifSent) {
+            if (checkIfBillsDue()) {
+                handleBillDueNotification();
+            }
+            billNotifSent = true;
+        }
+    })
 
     // get budget
     // useEffect(() => {

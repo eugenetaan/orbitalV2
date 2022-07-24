@@ -1,14 +1,48 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, FlatList, Animated, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, FlatList, Animated, TouchableOpacity, RefreshControl } from 'react-native'
 import { Swipeable } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/core';
-import { logBillsToDB } from '../components/dbLogDataFunctions'
+import { logBillsToDB, logExpenseToDB } from '../components/dbLogDataFunctions'
+import { updateDueDateOfBill } from '../components/notificationsFunctions';
 
-//var dummyBills = [{billName: 'Singtel', amount: "9.99", period: 'Monthly', nextDue: '19-08-2022'}]
-//sessionStorage.setItem()
+// import * as BackgroundFetch from 'expo-background-fetch';
+// import * as TaskManager from 'expo-task-manager';
+
+
+// const BACKGROUND_FETCH_TASK = 'background-fetch';
+
+
+// TaskManager.defineTask(sendNotifIfBill, async () => {
+//     const now = Date.now().toISOString().slice(0,10);
+    
+//     const getBillDueDates = () => {
+//         let budget;
+//         const user = db.collection('profiles')
+//             .doc(email)
+//             .get()
+//             .then((doc) => {
+//                 bills = doc.data().bills;
+//             //     billsDueDates = bills.map(function(bill) {
+//             //         return bill['nextDue'];
+//             //     })
+//             })
+        
+//         return bills;
+//     }
+    
+//     var bills = getBillDueDates();
+//     bills.forEach((bill)) => {
+//         if (bill.nextDue <= now);
+//     }
+
+
+//     return BackgroundFetch.BackgroundFetchResult.NewData;
+// });
+
 
 const BillsScreen = () => {
     const [bills, setBills] = useState(sessionStorage.getItem('bills'));
+    const [isFetching, setIsFetching] = useState(false);
     const navigation = useNavigation();
 
        // allows state to update upon screen focus ( very useful!!)
@@ -19,6 +53,24 @@ const BillsScreen = () => {
         
         return unsubscribe;
     }, [navigation]);
+
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const onRefresh = async () => {
+        setIsFetching(true);
+        await sleep(1000);
+        setBills(sessionStorage.getItem('bills'));
+        setIsFetching(false);
+      };
+
+
+    // async function registerBackgroundFetchAsync() {
+    //     return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
+    //       minimumInterval: 60 * 15, // 15 minutes
+    //       stopOnTerminate: false, // android only,
+    //       startOnBoot: true, // android only
+    //     });
 
 
     const handleAddBillNavigation = () => {
@@ -32,8 +84,8 @@ const BillsScreen = () => {
     }
 
     const BillItem = (bill) => {
-        console.log(bill)
-        const {billName, billAmount, billPeriod, nextDue, key} = bill.bill;
+        console.log(bill.bill)
+        const {billName, billAmount, billPeriod, billCategory, nextDue, key} = bill.bill;
 
         const handleDeleteBill = () => {
             var newBills = bills.filter(function(bill){
@@ -43,6 +95,29 @@ const BillsScreen = () => {
             logBillsToDB();
             setBills(newBills);
         } 
+
+        const handlePayBill = () => {
+            var todayDate = new Date().toISOString().slice(0,10)
+            if (nextDue.slice(0,10)<=todayDate) {
+                var billExpense = {
+                    title : billName,
+                    cat : billCategory,
+                    amount : billAmount,
+                    date : nextDue.slice(0,10),
+                    key : Math.random()
+                }
+                var oldData = sessionStorage.getItem('expenses');
+                // add items to front of array
+                oldData.unshift(billExpense);
+                var newData = oldData.sort(function(a,b) {
+                    return new Date(b.date) - new Date(a.date);
+                  });
+            
+                sessionStorage.setItem('expenses', newData);
+                logExpenseToDB();
+                updateDueDateOfBill(bill.bill);
+            }
+        }
     
 
         const swipeRight = (progress,dragX) =>{
@@ -69,7 +144,11 @@ const BillsScreen = () => {
                         <View style={styles.billContent}>
                             <Text style={styles.billContentText}>Amount: ${billAmount}</Text>
                             <Text style={styles.billContentText}>Period: {billPeriod}</Text>
+                            <Text style={styles.billContentText}>Category: {billCategory}</Text>
                             <Text style={styles.billContentText}>Next Due On: {nextDue.slice(0,10)}</Text>
+                            <TouchableOpacity style={styles.payBillButton} onPress={handlePayBill} >
+                                <Text> Pay Due Bill </Text>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </Animated.View>
@@ -85,7 +164,12 @@ const BillsScreen = () => {
         <View style={{marginTop: 10, height: "80%"}}>
                 <FlatList data={bills}
                   ListEmptyComponent={<View><Text style={{textAlign: 'center', marginTop: 70}}>No Bills Added!</Text></View>}
-                  renderItem={({item}) => <BillItem bill={item}/>}            
+                  renderItem={({item}) => <BillItem bill={item}/>} 
+                  refreshControl={
+                    <RefreshControl
+                        onRefresh={onRefresh}
+                        refreshing={isFetching}
+                    />}           
                 />
         </View>
     </View>
@@ -129,5 +213,13 @@ const styles = StyleSheet.create({
     },
     billContentText: {
         fontSize: 16
+    },
+    payBillButton: {
+        alignSelf: "center",
+        marginTop: 10,
+        backgroundColor: "#AEB8FE",
+        borderRadius: 25,
+        paddingHorizontal: 10,
+        paddingVertical: 10
     }
 })
