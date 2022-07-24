@@ -3,9 +3,41 @@ import { StyleSheet, Text, View, FlatList, Animated, TouchableOpacity } from 're
 import { Swipeable } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/core';
 import { logBillsToDB } from '../components/dbLogDataFunctions'
+import { auth } from '../Firebase';
+// import * as BackgroundFetch from 'expo-background-fetch';
+// import * as TaskManager from 'expo-task-manager';
 
-//var dummyBills = [{billName: 'Singtel', amount: "9.99", period: 'Monthly', nextDue: '19-08-2022'}]
-//sessionStorage.setItem()
+
+// const BACKGROUND_FETCH_TASK = 'background-fetch';
+
+
+// TaskManager.defineTask(sendNotifIfBill, async () => {
+//     const now = Date.now().toISOString().slice(0,10);
+    
+//     const getBillDueDates = () => {
+//         let budget;
+//         const user = db.collection('profiles')
+//             .doc(email)
+//             .get()
+//             .then((doc) => {
+//                 bills = doc.data().bills;
+//             //     billsDueDates = bills.map(function(bill) {
+//             //         return bill['nextDue'];
+//             //     })
+//             })
+        
+//         return bills;
+//     }
+    
+//     var bills = getBillDueDates();
+//     bills.forEach((bill)) => {
+//         if (bill.nextDue <= now);
+//     }
+
+
+//     return BackgroundFetch.BackgroundFetchResult.NewData;
+// });
+
 
 const BillsScreen = () => {
     const [bills, setBills] = useState(sessionStorage.getItem('bills'));
@@ -19,6 +51,14 @@ const BillsScreen = () => {
         
         return unsubscribe;
     }, [navigation]);
+
+
+    // async function registerBackgroundFetchAsync() {
+    //     return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
+    //       minimumInterval: 60 * 15, // 15 minutes
+    //       stopOnTerminate: false, // android only,
+    //       startOnBoot: true, // android only
+    //     });
 
 
     const handleAddBillNavigation = () => {

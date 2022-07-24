@@ -52,7 +52,7 @@ const logCategoriesToDB = () => {
 }
 
 
-const logBillsToDB = (billItem) => {
+const logBillsToDB = () => {
     var currentUserEmail = sessionStorage.getItem('email')
     var billsUpdated = sessionStorage.getItem('bills')
 

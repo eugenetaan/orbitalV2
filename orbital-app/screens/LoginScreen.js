@@ -12,7 +12,10 @@ import {
 import { Input, Button } from "@rneui/base";
 import { auth } from "../Firebase";
 import { sessionStorage } from "../localstorage";
-import { db } from '../Firebase'
+import { db } from '../Firebase';
+import { registerIndieID } from 'native-notify';
+import axios from 'axios';
+
 
 const LoginScreen = () => {
     const [email, setEmail] = useState('')
@@ -40,6 +43,8 @@ const LoginScreen = () => {
                 .then(sessionStorage.setItem("email", email))
                 .then(setExpenses())
                 .then(initBudget())
+                .then(initBills())
+                .then(registerIndieID(email, 3313, 'pHNaixT134xYCkOZbPDsMA'))
                 .then(() => navigation.navigate("Home"))
                 .catch(error=> alert("Invalid Email Or Password"))
         }
@@ -76,6 +81,19 @@ const LoginScreen = () => {
                 sessionStorage.setItem('budgetEndDate', endDate);
             })
     }
+
+     
+    const initBills = () => {
+            let bills;
+            const user = db.collection('profiles')
+                .doc(email)
+                .get()
+                .then((doc) => {
+                    bills = doc.data().bills;
+                    sessionStorage.setItem('bills', bills);
+                })
+    }
+    
 
 
     useEffect(()=> {

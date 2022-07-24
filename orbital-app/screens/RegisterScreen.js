@@ -22,14 +22,19 @@ const RegisterScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
+function chainError(err) {
+  return Promise.reject(err)
+};
 
+  //to test again
   const register = () => {
     if (username.length == 0 || password.length == 0 || email.length == 0) {
       alert("Please fill in all required fields!")
     } else {
       auth
         .createUserWithEmailAndPassword(email, password)
-        .then(db.collection("profiles").doc(email).set({
+        .then(async (res) => {
+          db.collection("profiles").doc(email).set({
           email: email,
           username: username,
           categories: [ {value: "Food"}, {value: "Entertainment"}, {value :"Transport"}, {value :"Health"}],
@@ -38,10 +43,15 @@ const RegisterScreen = ({ navigation }) => {
           budgetStartDate: new Date().toISOString(),
           budgetEndDate: new Date().toISOString(),
           bills: []
-        }))
+        })})
         .then(() => alert("Successfully Registered"))
         .then(() => {navigation.navigate("Login")})
-        .catch((err) => alert(err.message));
+        // .catch((err) => alert(err.message));
+        .catch((err) => {
+          alert(err.message)
+          chainError(err)
+        })
+
     }
   };
 
@@ -105,6 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     backgroundColor: "#F1F2F6",
     borderRadius: 25,
+    paddingVertical: 10,
   },
   button: {
     backgroundColor: "#F1F2F6",

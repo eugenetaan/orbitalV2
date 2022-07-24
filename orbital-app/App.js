@@ -15,10 +15,14 @@ import BudgetScreen from './screens/BudgetScreen';
 import CategoriesScreen from './screens/CategoriesScreen';
 import ChangeUsernameScreen from './screens/ChangeUsernameScreen';
 import AddBillScreen from './screens/AddBillScreen';
+import registerNNPushToken from 'native-notify';
+
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  registerNNPushToken(3313, 'pHNaixT134xYCkOZbPDsMA');
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
