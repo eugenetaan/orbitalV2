@@ -29,6 +29,7 @@ const ProfileScreen = () => {
             .signOut()
             .then(logAllDataToDB())
             .then(() => {navigation.navigate("Login")})
+            .then(() => {sessionStorage.setItem("billNotifSent", false)})
             .catch((error) => {alert("Something went wrong please try again")});
     }
 

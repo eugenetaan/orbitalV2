@@ -91,6 +91,7 @@ const LoginScreen = () => {
                 .then((doc) => {
                     bills = doc.data().bills;
                     sessionStorage.setItem('bills', bills);
+                    sessionStorage.setItem('billNotifSent', false)
                 })
     }
     

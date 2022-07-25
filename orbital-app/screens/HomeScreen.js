@@ -10,6 +10,7 @@ import { logExpensesToDB } from '../components/dbLogDataFunctions';
 import { ProgressChart } from "react-native-chart-kit";
 import { checkIfBillsDue, handleBillDueNotification } from '../components/notificationsFunctions';
 
+
 // let DUMMY = [
 //     {title: "netflix", cat:"entertainment", amount:"10.99", date:new Date(), key:1},
 //     {title: "spotify", cat:"music", amount:"10.99", date:new Date(), key:2}
@@ -18,7 +19,6 @@ import { checkIfBillsDue, handleBillDueNotification } from '../components/notifi
 // sessionStorage.setItem("currentBudget", "No Budget Set")
 // sessionStorage.setItem("dummyExpenses", DUMMY);
 
-var billNotifSent = false;
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -123,11 +123,14 @@ const HomeScreen = () => {
 
     // push notif 
     useEffect(() => {
+        var billNotifSent = sessionStorage.getItem('billNotifSent')
+
         if (!billNotifSent) {
             if (checkIfBillsDue()) {
                 handleBillDueNotification();
             }
-            billNotifSent = true;
+            console.log("sent")
+            sessionStorage.setItem("billNotifSent", true);
         }
     })
 

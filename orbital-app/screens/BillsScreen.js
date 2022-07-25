@@ -84,7 +84,7 @@ const BillsScreen = () => {
     }
 
     const BillItem = (bill) => {
-        console.log(bill.bill)
+        //console.log(bill.bill)
         const {billName, billAmount, billPeriod, billCategory, nextDue, key} = bill.bill;
 
         const handleDeleteBill = () => {
@@ -116,7 +116,11 @@ const BillsScreen = () => {
                 sessionStorage.setItem('expenses', newData);
                 logExpenseToDB();
                 updateDueDateOfBill(bill.bill);
+                alert(`${billName}` + " paid" );
+            } else {
+                alert(`${billName}` + " not due yet" );
             }
+
         }
     
 

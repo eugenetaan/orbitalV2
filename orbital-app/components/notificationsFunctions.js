@@ -3,6 +3,9 @@ import { sessionStorage } from "../localstorage"
 import { logBillsToDB } from "./dbLogDataFunctions"
 
 
+
+var billNotifSent = false;
+
 const monthsWith31Days = [1,3,5,7,8,10,12]
 
 const monthsWith30Days = [4,6,9,11]
@@ -118,4 +121,4 @@ const checkIfBillsDue = () => {
 }
 
 
-export {handleBillDueNotification, checkIfBillsDue, updateDueDateOfBills, updateDueDateOfBill};
+export {handleBillDueNotification, checkIfBillsDue, updateDueDateOfBills, updateDueDateOfBill, billNotifSent};
